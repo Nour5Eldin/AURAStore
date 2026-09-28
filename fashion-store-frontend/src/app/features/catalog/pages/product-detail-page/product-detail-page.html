@@ -1,0 +1,155 @@
+<div class="pdp" *ngIf="!loading && product">
+
+  <!-- ─── Breadcrumb ──────────────────────────────────────────────────────── -->
+  <nav class="pdp__breadcrumb" aria-label="Breadcrumb">
+    <a routerLink="/" class="pdp__breadcrumb-link">Home</a>
+    <span class="pdp__breadcrumb-sep">—</span>
+    <a routerLink="/products" class="pdp__breadcrumb-link">All Products</a>
+    <span class="pdp__breadcrumb-sep">—</span>
+    <span class="pdp__breadcrumb-current">{{ product.name }}</span>
+  </nav>
+
+  <!-- ─── Main Content ─────────────────────────────────────────────────────── -->
+  <div class="pdp__content">
+
+    <!-- ── Gallery ──────────────────────────────────────────────────────────── -->
+    <div class="pdp__gallery">
+      <!-- Thumbnails (left) -->
+      <div class="pdp__thumbs">
+        <button *ngFor="let img of product.images; let i = index"
+          class="pdp__thumb" [class.pdp__thumb--active]="i === selectedImage"
+          (click)="selectImage(i)" [attr.aria-label]="'View image ' + (i+1)">
+          <img [src]="img" [alt]="product.name + ' ' + (i+1)" />
+        </button>
+      </div>
+
+      <!-- Main Image -->
+      <div class="pdp__main-image">
+        <img [src]="product.images[selectedImage] || product.mainImage" [alt]="product.name"
+          class="pdp__main-image-img" />
+        <div *ngIf="isOutOfStock" class="pdp__sold-out-badge">Sold Out</div>
+      </div>
+    </div>
+
+    <!-- ── Info ─────────────────────────────────────────────────────────────── -->
+    <div class="pdp__info">
+
+      <!-- Name -->
+      <h1 class="pdp__name">{{ product.name }}</h1>
+
+      <!-- Price + Stock -->
+      <div class="pdp__price-row">
+        <span class="pdp__price">EGP {{ product.price | number }}</span>
+        <span class="pdp__stock-badge pdp__stock-badge--low" *ngIf="isLowStock">
+          Only {{ product.stock }} left
+        </span>
+      </div>
+
+      <!-- Divider -->
+      <div class="pdp__divider"></div>
+
+      <!-- Description -->
+      <p class="pdp__desc">{{ product.description }}</p>
+
+      <div class="pdp__divider"></div>
+
+      <!-- Quantity Selector -->
+      <div class="pdp__qty-row" *ngIf="!isOutOfStock">
+        <span class="pdp__qty-label">Quantity</span>
+        <div class="qty-control">
+          <button class="qty-control__btn" (click)="decreaseQty()" [disabled]="quantity <= 1" aria-label="Decrease quantity">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 12h14"/>
+            </svg>
+          </button>
+          <span class="qty-control__val">{{ quantity }}</span>
+          <button class="qty-control__btn" (click)="increaseQty()" [disabled]="quantity >= product.stock" aria-label="Increase quantity">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Add to Cart -->
+      <button class="pdp__add-btn"
+        [class.pdp__add-btn--adding]="isAdding"
+        [class.pdp__add-btn--added]="addedToCart"
+        [disabled]="isOutOfStock || isAdding"
+        (click)="onAddToCart()"
+        id="add-to-cart-btn">
+
+        <span class="pdp__add-btn-text" *ngIf="!isAdding && !addedToCart && !isOutOfStock">
+          Add to Cart
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </span>
+        <span *ngIf="isAdding">
+          <svg class="pdp__add-btn-spinner" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/>
+          </svg>
+          Adding…
+        </span>
+        <span *ngIf="addedToCart"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">check</span> Added!</span>
+        <span *ngIf="isOutOfStock">Out of Stock</span>
+      </button>
+
+      <!-- Service Perks -->
+      <div class="pdp__perks">
+        <div class="pdp__perk">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <span>Free delivery over EGP 1,000</span>
+        </div>
+        <div class="pdp__perk">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          <span>30-day easy returns</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── Related Products ──────────────────────────────────────────────────── -->
+  <section class="pdp__related" *ngIf="relatedProducts.length > 0">
+    <div class="pdp__related-header">
+      <p class="pdp__related-eyebrow">More Like This</p>
+      <h2 class="pdp__related-title">You May Also Like</h2>
+    </div>
+    <div class="pdp__related-grid">
+      <div class="balmoral-card" *ngFor="let p of relatedProducts" [routerLink]="['/products', p.slug]">
+        <div class="balmoral-card__image-wrap">
+          <img [src]="p.mainImage || p.images[0]" [alt]="p.name" class="balmoral-card__image" loading="lazy" />
+        </div>
+        <div class="balmoral-card__body">
+          <p class="balmoral-card__name">{{ p.name }}</p>
+          <p class="balmoral-card__price">EGP {{ p.price | number }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ─── Skeleton ──────────────────────────────────────────────────────────── -->
+<div class="pdp-skeleton" *ngIf="loading">
+  <div class="pdp-skeleton__images">
+    <div class="pdp-skeleton__main"></div>
+  </div>
+  <div class="pdp-skeleton__info">
+    <div class="pdp-skeleton__line pdp-skeleton__line--sm"></div>
+    <div class="pdp-skeleton__line pdp-skeleton__line--lg"></div>
+    <div class="pdp-skeleton__line pdp-skeleton__line--md"></div>
+    <div class="pdp-skeleton__line pdp-skeleton__line--full"></div>
+    <div class="pdp-skeleton__line pdp-skeleton__line--full"></div>
+    <div class="pdp-skeleton__btn"></div>
+  </div>
+</div>

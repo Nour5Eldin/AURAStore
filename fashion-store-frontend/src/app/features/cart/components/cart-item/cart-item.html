@@ -1,0 +1,46 @@
+<div class="cart-item">
+
+    <!-- Image -->
+    <a [routerLink]="['/products', product?.slug]" class="cart-item__image-wrap">
+        <img [src]="product?.mainImage || product?.images?.[0]" [alt]="product?.name || 'Product'"
+            class="cart-item__image" />
+    </a>
+
+    <!-- Info -->
+    <div class="cart-item__info">
+        <a [routerLink]="['/products', product?.slug]" class="cart-item__name">
+            {{ product?.name || 'Product' }}
+        </a>
+        <p class="cart-item__unit-price">
+            EGP {{ item.price | number }} each
+        </p>
+        <app-stock-badge [stock]="product?.stock || 99"></app-stock-badge>
+    </div>
+
+    <!-- Actions -->
+    <div class="cart-item__actions">
+
+        <!-- Qty -->
+        <div class="qty-control">
+            <button class="qty-control__btn" [disabled]="item.quantity <= 1" (click)="decrease()">−</button>
+            <span class="qty-control__val">{{ item.quantity }}</span>
+            <button class="qty-control__btn" [disabled]="product?.stock !== undefined && item.quantity >= product.stock"
+                (click)="increase()">+</button>
+        </div>
+
+        <!-- Total -->
+        <span class="cart-item__total">
+            EGP {{ item.totalPrice | number }}
+        </span>
+
+        <!-- Remove -->
+        <button class="cart-item__remove" (click)="remove.emit()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4h6v2" />
+            </svg>
+        </button>
+    </div>
+</div>

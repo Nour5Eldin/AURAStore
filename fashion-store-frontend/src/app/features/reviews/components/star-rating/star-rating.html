@@ -1,0 +1,45 @@
+<div class="star-rating" [class.star-rating--interactive]="interactive" (mouseleave)="onLeave()">
+  <button
+    *ngFor="let type of stars; let i = index"
+    type="button"
+    class="star-rating__star"
+    [class.star-rating__star--full]="type === 'full'"
+    [class.star-rating__star--half]="type === 'half'"
+    [class.star-rating__star--empty]="type === 'empty'"
+    [style.fontSize.px]="size"
+    [attr.aria-label]="'Rate ' + (i + 1) + ' star'"
+    [disabled]="!interactive"
+    (mouseenter)="onHover(i + 1)"
+    (click)="onClick(i + 1)">
+    <svg
+      [attr.width]="size"
+      [attr.height]="size"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <!-- Full star -->
+      <polygon
+        *ngIf="type === 'full'"
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+        class="star-poly star-poly--filled" />
+      <!-- Half star using clipPath trick via two polygons -->
+      <polygon
+        *ngIf="type === 'half'"
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+        class="star-poly star-poly--empty" />
+      <clipPath [id]="'half-' + i">
+        <rect x="0" y="0" width="12" height="24" />
+      </clipPath>
+      <polygon
+        *ngIf="type === 'half'"
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+        class="star-poly star-poly--filled"
+        [attr.clip-path]="'url(#half-' + i + ')'" />
+      <!-- Empty star -->
+      <polygon
+        *ngIf="type === 'empty'"
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+        class="star-poly star-poly--empty" />
+    </svg>
+  </button>
+</div>

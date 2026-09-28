@@ -1,0 +1,46 @@
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  &--interactive .star-rating__star {
+    cursor: pointer;
+    transition: transform 150ms ease;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+}
+
+.star-rating__star {
+  background: none;
+  border: none;
+  padding: 1px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.star-poly {
+  transition: fill 150ms ease, stroke 150ms ease;
+
+  &--filled {
+    fill: #D4A015;
+    stroke: #D4A015;
+    stroke-width: 1;
+    stroke-linejoin: round;
+  }
+
+  &--empty {
+    fill: none;
+    stroke: var(--color-border-strong);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+}

@@ -1,0 +1,25 @@
+<aside class="admin-sidebar">
+  <div class="admin-sidebar__brand">
+    <a routerLink="/" class="admin-sidebar__logo">AURA</a>
+    <span class="admin-sidebar__badge">Admin</span>
+  </div>
+
+  <nav class="admin-sidebar__nav">
+    <a *ngFor="let item of navItems"
+       [routerLink]="item.route"
+       routerLinkActive="admin-sidebar__link--active"
+       class="admin-sidebar__link">
+      <span class="admin-sidebar__link-icon material-icons">{{ item.icon }}</span>
+      <span class="admin-sidebar__link-label">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="admin-sidebar__footer">
+    <a routerLink="/" class="admin-sidebar__store-link">
+      View Store
+    </a>
+    <button class="admin-sidebar__logout" (click)="onLogout()">
+      <span class="material-icons" style="font-size:inherit;vertical-align:middle;">logout</span> Logout
+    </button>
+  </div>
+</aside>

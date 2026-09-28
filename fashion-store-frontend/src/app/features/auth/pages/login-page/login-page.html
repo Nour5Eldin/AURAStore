@@ -1,0 +1,21 @@
+<div class="auth-layout">
+    <div class="auth-layout__form">
+        <a routerLink="/" class="auth-layout__logo">AURA</a>
+        <section class="auth-card" aria-labelledby="login-title">
+            <h1 id="login-title" class="auth-card__title">WELCOME BACK</h1>
+            <p class="auth-card__subtitle">Secure sign in is provided by Auth0.</p>
+            <button type="button" class="auth-btn" [disabled]="loading" (click)="login()">
+                {{ loading ? 'REDIRECTING…' : 'SIGN IN' }}
+            </button>
+            <div class="auth-card__divider">OR CONTINUE WITH</div>
+            <div class="auth-card__social">
+                <button type="button" class="auth-card__social-btn" (click)="signInWithProvider('google')">Google</button>
+                <button type="button" class="auth-card__social-btn" (click)="signInWithProvider('apple')">Apple</button>
+            </div>
+            <div class="auth-card__divider-line"></div>
+            <div class="auth-card__switch"><p>New to AURA?</p><a routerLink="/auth/register" class="auth-card__switch-btn">CREATE AN ACCOUNT</a></div>
+            <p class="auth-card__switch"><a routerLink="/auth/forgot-password" class="auth-card__inline-link">Forgot your password?</a></p>
+        </section>
+    </div>
+    <div class="auth-layout__image"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800" alt="Fashion" /></div>
+</div>

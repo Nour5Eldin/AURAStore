@@ -1,0 +1,379 @@
+<header class="header" [class.header--scrolled]="isScrolled || !isHomePage">
+
+    <!-- Announcement bar (optional, hidden by default) -->
+    <div class="header__container">
+
+        <!-- ── Left Nav (Desktop) ──────────────────────────────────────────── -->
+        <nav class="header__nav header__nav--left">
+
+            <!-- NEW IN -->
+            <div class="header__nav-item">
+                <a class="header__nav-link" [routerLink]="['/products']" [queryParams]="{ sortBy: 'newest' }"
+                    routerLinkActive="active">
+                    New In
+                </a>
+            </div>
+
+            <!-- ═══ MEN ════════════════════════════════════════════════════ -->
+            <div class="header__nav-item" (mouseenter)="openMegaMenu('men')" (mouseleave)="closeMegaMenu()">
+
+                <a class="header__nav-link" [routerLink]="['/products']" [queryParams]="{ search: 'men' }" [class.active]="activeMegaMenu === 'men'"
+                    routerLinkActive="active">
+                    Men
+                </a>
+
+                <!-- MEN Mega Menu -->
+                <div class="mega-menu" [class.mega-menu--light]="isScrolled || !isHomePage" *ngIf="activeMegaMenu === 'men'">
+                    <div class="mega-menu__grid">
+
+                        <!-- Col 1: TOPS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Tops</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of menMenu.tops">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'men')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="menMenu.tops.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 2: BOTTOMS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Bottoms</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of menMenu.bottoms">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'men')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="menMenu.bottoms.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: SUITS & ACCS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Suits &amp; Accs</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of menMenu.formal">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'men')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="menMenu.formal.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ WOMEN ══════════════════════════════════════════════════ -->
+            <div class="header__nav-item" (mouseenter)="openMegaMenu('women')" (mouseleave)="closeMegaMenu()">
+
+                <a class="header__nav-link" [routerLink]="['/products']" [queryParams]="{ search: 'women' }"
+                    [class.active]="activeMegaMenu === 'women'" routerLinkActive="active">
+                    Women
+                </a>
+
+                <!-- WOMEN Mega Menu -->
+                <div class="mega-menu" [class.mega-menu--light]="isScrolled || !isHomePage" *ngIf="activeMegaMenu === 'women'">     
+                    <div class="mega-menu__grid">
+
+
+                        <!-- Col 1: TOPS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Tops</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of womenMenu.tops">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'women')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="womenMenu.tops.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 2: BOTTOMS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Bottoms</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of womenMenu.bottoms">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'women')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="womenMenu.bottoms.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: DRESSES & ACCS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Dresses &amp; Accs</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of womenMenu.formal">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'women')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="womenMenu.formal.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+                        <!-- ═══ KIDS    ══════════════════════════════════════════════════ -->
+            <div class="header__nav-item" (mouseenter)="openMegaMenu('kids')" (mouseleave)="closeMegaMenu()">
+
+                <a class="header__nav-link" [routerLink]="['/products']" [queryParams]="{ search: 'kids' }"
+                    [class.active]="activeMegaMenu === 'kids'" routerLinkActive="active">
+                    Kids
+                </a>
+
+                <!-- KIDS Mega Menu -->
+                <div class="mega-menu" [class.mega-menu--light]="isScrolled || !isHomePage" *ngIf="activeMegaMenu === 'kids'">
+                    <div class="mega-menu__grid">
+
+
+                        <!-- Col 1: TOPS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Tops</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of kidsMenu.tops">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'kids')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="kidsMenu.tops.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 2: BOTTOMS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Bottoms</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of kidsMenu.bottoms">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'kids')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="kidsMenu.bottoms.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: DRESSES & ACCS -->
+                        <div class="mega-menu__col">
+                            <h4 class="mega-menu__col-title">Dresses &amp; Accs</h4>
+                            <ul class="mega-menu__list">
+                                <li *ngFor="let item of kidsMenu.formal">
+                                    <a (click)="navigateTo(item.catId, item.subId, undefined, 'kids')">{{ item.label }}</a>
+                                </li>
+                                <li *ngIf="kidsMenu.formal.length === 0" class="mega-menu__empty">Loading...</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- SALES -->
+            <div class="header__nav-item">
+                <a class="header__nav-link header__nav-link--sale" [routerLink]="['/products']"
+                    [queryParams]="{ sortBy: 'price_asc' }">
+                    Sale
+                </a>
+            </div>
+
+        </nav>
+
+        <!-- ── Center Logo ─────────────────────────────────────────────────── -->
+        <a routerLink="/" class="header__logo">
+            <span class="header__logo-text">AURA</span>
+        </a>
+
+        <!-- ── Right Actions ───────────────────────────────────────────────── -->
+        <div class="header__actions">
+
+            <button class="header__icon-btn" id="search-btn" (click)="isSearchOpen = !isSearchOpen"
+                aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+            </button>
+
+            <a routerLink="/cart" class="header__icon-btn header__cart-btn" id="cart-btn" aria-label="Cart">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <span class="header__cart-badge" *ngIf="(cartCount$ | async) as count">
+                    {{ count > 9 ? '9+' : count }}
+                </span>
+            </a>
+
+            <div class="header__account" *ngIf="isLoggedIn$ | async">
+                <button class="header__avatar-btn" id="account-btn" (click)="toggleAccountMenu()"
+                    aria-label="Account">
+                    <img *ngIf="(user$ | async)?.avatar as avatar" [src]="avatar" [alt]="(user$ | async)?.name"
+                        class="header__avatar-img" />
+                    <span *ngIf="!(user$ | async)?.avatar" class="header__avatar-initials">
+                        {{ (user$ | async)?.name | slice:0:1 | uppercase }}
+                    </span>
+                </button>
+
+                <div class="header__account-dropdown" *ngIf="isAccountMenuOpen">
+                    <div class="header__account-info">
+                        <p class="header__account-name">{{ (user$ | async)?.name }}</p>
+                        <p class="header__account-email">{{ (user$ | async)?.email }}</p>
+                    </div>
+                    <div class="header__account-divider"></div>
+                    <a routerLink="/account/profile" class="header__account-item" id="profile-link" (click)="closeMenus()">My Profile</a>
+                    <a routerLink="/account/orders" class="header__account-item" id="orders-link" (click)="closeMenus()">My Orders</a>
+                    <a routerLink="/account/addresses" class="header__account-item" id="addresses-link" (click)="closeMenus()">Addresses</a>
+                    <a *ngIf="isAdmin$ | async" routerLink="/admin"
+                        class="header__account-item header__account-item--admin" id="admin-link" (click)="closeMenus()">Admin Panel</a>
+                    <div class="header__account-divider"></div>
+                    <button class="header__account-item header__account-item--logout" id="logout-btn"
+                        (click)="onLogout()">Logout</button>
+                </div>
+            </div>
+
+            <a *ngIf="!(isLoggedIn$ | async)" routerLink="/auth/login" class="header__icon-btn" id="login-btn"
+                aria-label="Login">
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                    fill="currentColor">
+                    <path
+                        d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                </svg>
+            </a>
+
+            <button class="header__hamburger" id="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="3" y1="7" x2="21" y2="7" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="17" x2="21" y2="17" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ── Mobile Menu ─────────────────────────────────────────────────────── -->
+    <div class="header__mobile-menu" [class.header__mobile-menu--open]="isMobileMenuOpen">
+        <div class="header__mobile-overlay" (click)="closeMenus()"></div>
+        <div class="header__mobile-drawer">
+
+            <!-- Mobile Header -->
+            <div class="header__mobile-head">
+                <span class="header__mobile-logo">AURA</span>
+                <button class="header__mobile-close" (click)="closeMenus()" aria-label="Close menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="header__mobile-divider"></div>
+
+            <!-- Guest / User State -->
+            <div class="header__mobile-user" *ngIf="isLoggedIn$ | async">
+                <span class="header__mobile-user-name">{{ (user$ | async)?.name }}</span>
+            </div>
+            <div class="header__mobile-guest" *ngIf="!(isLoggedIn$ | async)">
+                <a routerLink="/auth/login" (click)="closeMenus()" class="header__mobile-btn" id="mobile-login-btn">Login</a>
+                <a routerLink="/auth/register" (click)="closeMenus()"
+                    class="header__mobile-btn header__mobile-btn--outline" id="mobile-register-btn">Register</a>
+            </div>
+
+            <div class="header__mobile-divider"></div>
+
+            <!-- Nav Links -->
+            <a [routerLink]="['/products']" [queryParams]="{ sortBy: 'newest' }" (click)="closeMenus()"
+                class="header__mobile-link">New In</a>
+
+            <!-- MEN Accordion -->
+            <div class="header__mobile-accordion">
+                <div class="header__mobile-accordion-header"
+                    (click)="activeMegaMenu = activeMegaMenu === 'men' ? null : 'men'">
+                    Men
+                    <span class="header__mobile-accordion-chevron" [class.open]="activeMegaMenu === 'men'">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="header__mobile-accordion-body" *ngIf="activeMegaMenu === 'men'">
+                    <span class="header__mobile-sub-group">Tops</span>
+                    <a *ngFor="let item of menMenu.tops" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'men', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+
+                    <span class="header__mobile-sub-group">Bottoms</span>
+                    <a *ngFor="let item of menMenu.bottoms" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'men', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+
+                    <span class="header__mobile-sub-group">Suits &amp; Accs</span>
+                    <a *ngFor="let item of menMenu.formal" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'men', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+                </div>
+            </div>
+
+            <!-- WOMEN Accordion -->
+            <div class="header__mobile-accordion">
+                <div class="header__mobile-accordion-header"
+                    (click)="activeMegaMenu = activeMegaMenu === 'women' ? null : 'women'">
+                    Women
+                    <span class="header__mobile-accordion-chevron" [class.open]="activeMegaMenu === 'women'">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="header__mobile-accordion-body" *ngIf="activeMegaMenu === 'women'">
+                    <span class="header__mobile-sub-group">Tops</span>
+                    <a *ngFor="let item of womenMenu.tops" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'women', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+
+                    <span class="header__mobile-sub-group">Bottoms</span>
+                    <a *ngFor="let item of womenMenu.bottoms" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'women', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+
+                    <span class="header__mobile-sub-group">Dresses &amp; Accs</span>
+                    <a *ngFor="let item of womenMenu.formal" [routerLink]="['/products']"
+                        [queryParams]="{ search: 'women', categoryId: item.catId, subCategoryId: item.subId }" (click)="closeMenus()"
+                        class="header__mobile-sub-link">{{ item.label }}</a>
+                </div>
+            </div>
+
+            <a [routerLink]="['/products']" [queryParams]="{ sortBy: 'price_asc' }" (click)="closeMenus()"
+                class="header__mobile-link header__mobile-link--sale">Sale</a>
+
+            <div class="header__mobile-divider" *ngIf="isLoggedIn$ | async"></div>
+
+            <ng-container *ngIf="isLoggedIn$ | async">
+                <a routerLink="/account/profile" (click)="closeMenus()" class="header__mobile-link">Profile</a>
+                <a routerLink="/account/orders" (click)="closeMenus()" class="header__mobile-link">Orders</a>
+                <a routerLink="/account/addresses" (click)="closeMenus()" class="header__mobile-link">Addresses</a>
+                <a *ngIf="isAdmin$ | async" routerLink="/admin" (click)="closeMenus()" class="header__mobile-link">Admin Panel</a>
+                <button (click)="onLogout()" class="header__mobile-logout">Logout</button>
+            </ng-container>
+
+        </div>
+    </div>
+</header>
+
+<!-- ── Search Overlay ──────────────────────────────────────────────────────── -->
+<div class="search-overlay" *ngIf="isSearchOpen" (click)="isSearchOpen = false" role="dialog" aria-label="Search">
+    <div class="search-overlay__box" (click)="$event.stopPropagation()">
+        <div class="search-overlay__input-wrap">
+            <svg class="search-overlay__icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input #searchInput class="search-overlay__input" type="text" placeholder="Search for products…"
+                autofocus
+                (keyup.enter)="navigateTo(undefined, undefined, undefined); isSearchOpen = false"
+                (keyup.escape)="isSearchOpen = false"
+                [value]="searchQuery"
+                (input)="searchQuery = $any($event.target).value" />
+            <button class="search-overlay__close" (click)="isSearchOpen = false" aria-label="Close search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <p class="search-overlay__hint">Press Enter to search · Esc to close</p>
+    </div>
+</div>

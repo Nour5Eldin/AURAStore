@@ -1,0 +1,89 @@
+<div class="account-page">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- Sidebar -->
+            <aside class="account-sidebar">
+                <nav class="account-nav">
+                    <a routerLink="/account/profile" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Profile</a>
+                    <a routerLink="/account/orders" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">My Orders</a>
+                    <a routerLink="/account/addresses" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Addresses</a>
+                    <a routerLink="/account/testimonial" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Write Review</a>
+                </nav>
+            </aside>
+
+            <div class="account-content">
+                <div class="account-card">
+
+                    <div class="account-card__header">
+                        <h2 class="account-card__title">My Orders</h2>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="orders-filter">
+                        <button *ngFor="let opt of statusOptions" class="orders-filter__btn"
+                            [class.orders-filter__btn--active]="filterStatus === opt.value"
+                            (click)="onStatusFilter(opt.value)">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+
+                    <!-- Loading -->
+                    <div *ngIf="loading" class="orders-list">
+                        <app-skeleton-loader *ngFor="let i of [1,2,3,4]" height="100px"></app-skeleton-loader>
+                    </div>
+
+                    <!-- Empty -->
+                    <app-empty-state *ngIf="!loading && orders.length === 0" icon="inventory_2" title="No orders yet"
+                        message="You haven't placed any orders yet." btnText="Browse Products" btnLink="/products">
+                    </app-empty-state>
+
+                    <!-- Orders -->
+                    <div *ngIf="!loading && orders.length > 0" class="orders-list">
+                        <div *ngFor="let order of orders" class="order-row" (click)="viewOrder(order._id)">
+
+                            <div class="order-row__left">
+                                <div class="order-row__imgs">
+                                    <img *ngFor="let p of order.products.slice(0,3)" [src]="p.image" [alt]="p.name"
+                                        class="order-row__img" />
+                                </div>
+                                <div class="order-row__info">
+                                    <p class="order-row__id">#{{ order._id.slice(-8).toUpperCase() }}</p>
+                                    <p class="order-row__date">
+                                        {{ order.createdAt | date:'d MMM yyyy' }}
+                                    </p>
+                                    <p class="order-row__count">
+                                        {{ order.products.length }} item{{ order.products.length > 1 ? 's' : '' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="order-row__right">
+                                <span class="order-row__status" [style.color]="getStatusColor(order.status)"
+                                    [style.background]="getStatusColor(order.status) + '18'">
+                                    {{ order.status | orderStatus }}
+                                </span>
+                                <span class="order-row__total">
+                                    EGP {{ order.totalPrice | number }}
+                                </span>
+                                <span class="order-row__arrow">›</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1"
+                        [currentPage]="pagination.page || 1" [totalPages]="pagination.totalPages || 1"
+                        [totalItems]="pagination.total || 0" [limit]="10" (pageChange)="onPageChange($event)">
+                    </app-pagination>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

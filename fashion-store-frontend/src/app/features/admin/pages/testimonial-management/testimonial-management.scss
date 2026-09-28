@@ -1,0 +1,211 @@
+.admin-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f8f6;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 80px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+}
+
+// ─── Filters ──────────────────────────────────────────────────────────────
+.admin-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-select {
+  padding: 9px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--color-canvas);
+  outline: none;
+  min-width: 160px;
+  cursor: pointer;
+
+  &:focus {
+    border-color: #1e3a8a;
+  }
+}
+
+// ─── Testimonial Grid ─────────────────────────────────────────────────────
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Testimonial Card ─────────────────────────────────────────────────────
+.testimonial-admin-card {
+  background: var(--color-canvas);
+  border: 0.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: var(--color-canvas);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  &__date {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  &__stars {
+    color: #c9a84c;
+    font-size: 16px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  &__comment {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.65;
+    flex: 1;
+    font-style: italic;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f3f4f6;
+  }
+}
+
+// ─── Badges ───────────────────────────────────────────────────────────────
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+
+  &--green {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+  &--amber {
+    background: #fffbeb;
+    color: #d97706;
+  }
+  &--red {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+}
+
+// ─── Admin Buttons (inline) ───────────────────────────────────────────────
+.admin-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-btn {
+  padding: 7px 16px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background: var(--color-canvas);
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &--success {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: var(--color-canvas);
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &--danger {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: var(--color-canvas);
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &--sm {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+}

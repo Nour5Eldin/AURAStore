@@ -1,0 +1,52 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Review Analytics</h1>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="ra-summary" *ngIf="!loading">
+            <div class="ra-avg">
+                <span class="ra-avg__num">{{ avgRating }}</span>
+                <span class="ra-avg__stars"><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+                <span class="ra-avg__label">Average Rating</span>
+                <span class="ra-avg__total">{{ pagination.total || 0 }} reviews</span>
+            </div>
+
+            <div class="ra-breakdown">
+                <div *ngFor="let item of ratingBreakdown" class="ra-breakdown__row">
+                    <span class="ra-breakdown__star">{{ item.star }}<span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+                    <div class="ra-breakdown__bar-track">
+                        <div class="ra-breakdown__bar-fill" [style.width]="item.pct + '%'">
+                        </div>
+                    </div>
+                    <span class="ra-breakdown__count">{{ item.count }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="admin-filters">
+            <select class="admin-select" [(ngModel)]="filterStar" (change)="page=1; load()">
+                <option [value]="0">All Stars</option>
+                <option *ngFor="let s of [5,4,3,2,1]" [value]="s">{{ s }} ★</option>
+            </select>
+            <select class="admin-select" [(ngModel)]="filterApproved" (change)="page=1; load()">
+                <option value="">All Status</option>
+                <option value="true">Approved</option>
+                <option value="false">Hidden</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <app-review-data-table [reviews]="reviews" [loading]="loading" (toggle)="onToggle($event)">
+        </app-review-data-table>
+
+        <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1" [currentPage]="pagination.page || 1"
+            [totalPages]="pagination.totalPages || 1" [totalItems]="pagination.total || 0" [limit]="20"
+            (pageChange)="page = $event; load()">
+        </app-pagination>
+    </div>
+</div>

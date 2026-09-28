@@ -1,0 +1,169 @@
+<div class="admin-page">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="admin-content">
+    <div class="admin-topbar">
+      <h1 class="admin-topbar__title">Categories</h1>
+      <button class="admin-btn admin-btn--primary" (click)="showCatForm = true; editingCatId = null; catForm.reset({isActive:true})">
+        + Add Category
+      </button>
+    </div>
+
+    <!-- Category Form -->
+    <div *ngIf="showCatForm" class="admin-form-card">
+      <h3 class="admin-form-card__title">
+        {{ editingCatId ? 'Edit Category' : 'New Category' }}
+      </h3>
+      <form [formGroup]="catForm" (ngSubmit)="onSaveCategory()" class="admin-form">
+        <div class="form-field">
+          <label class="form-field__label">Title</label>
+          <input class="form-field__input" type="text"
+                 formControlName="title" placeholder="Category name" />
+        </div>
+        <label class="consent-check">
+          <input type="checkbox" formControlName="isActive" />
+          <span>Active (visible on storefront)</span>
+        </label>
+        <div style="display:flex; gap:10px; margin-top:8px">
+          <button type="button" class="admin-btn" (click)="showCatForm=false">Cancel</button>
+          <button type="submit" class="admin-btn admin-btn--primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Categories Table -->
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Slug</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="loading">
+            <tr *ngFor="let i of [1,2,3,4]">
+              <td colspan="4">
+                <app-skeleton-loader height="40px"></app-skeleton-loader>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngFor="let cat of categories">
+            <td class="admin-table__bold">{{ cat.title }}</td>
+            <td class="admin-table__muted">{{ cat.slug }}</td>
+            <td>
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="cat.isActive" (change)="onToggleCat(cat)" />
+                <span class="toggle-switch__slider"></span>
+              </label>
+            </td>
+            <td>
+              <div class="admin-table__actions">
+                <button class="admin-table__btn"
+                        (click)="editingCatId = cat._id; catForm.patchValue(cat); showCatForm = true">
+                  <span class="material-icons" style="font-size:inherit;vertical-align:middle;">edit</span> Edit
+                </button>
+                <button class="admin-table__btn admin-table__btn--danger"
+                        (click)="onDeleteCat(cat._id)"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">delete</span></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <app-empty-state *ngIf="!loading && categories.length === 0" icon="folder" title="No categories found" message="Click 'Add Category' to create one.">
+      </app-empty-state>
+    </div>
+
+    <!-- Subcategory Section -->
+    <div class="admin-topbar" style="margin-top:32px">
+      <h2 class="admin-topbar__title">Subcategories</h2>
+      <button class="admin-btn admin-btn--primary"
+              (click)="showSubForm = true; editingSubId = null; subForm.reset({isActive:true})">
+        + Add Subcategory
+      </button>
+    </div>
+
+    <!-- Subcategory Form -->
+    <div *ngIf="showSubForm" class="admin-form-card">
+      <h3 class="admin-form-card__title">
+        {{ editingSubId ? 'Edit Subcategory' : 'New Subcategory' }}
+      </h3>
+      <form [formGroup]="subForm" (ngSubmit)="onSaveSubcategory()" class="admin-form">
+        <div class="form-field">
+          <label class="form-field__label">Category</label>
+          <select class="form-field__input" formControlName="categoryId">
+            <option value="">Select category</option>
+            <option *ngFor="let c of categories" [value]="c._id">{{ c.title }}</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-field__label">Title</label>
+          <input class="form-field__input" type="text"
+                 formControlName="title" placeholder="Subcategory name" />
+        </div>
+        <label class="consent-check">
+          <input type="checkbox" formControlName="isActive" />
+          <span>Active</span>
+        </label>
+        <div style="display:flex; gap:10px; margin-top:8px">
+          <button type="button" class="admin-btn" (click)="showSubForm=false">Cancel</button>
+          <button type="submit" class="admin-btn admin-btn--primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Subcategories Table -->
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Subcategory</th>
+            <th>Slug</th>
+            <th>Parent Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="loading">
+            <tr *ngFor="let i of [1,2,3,4]">
+              <td colspan="5">
+                <app-skeleton-loader height="40px"></app-skeleton-loader>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngFor="let sub of subcategories">
+            <td class="admin-table__bold">{{ sub.title }}</td>
+            <td class="admin-table__muted">{{ sub.slug }}</td>
+            <td class="admin-table__muted">
+              {{ getCategoryName(sub.categoryId) }}
+            </td>
+            <td>
+              <span class="badge" [class.badge--green]="sub.isActive" [class.badge--red]="!sub.isActive">
+                {{ sub.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <div class="admin-table__actions">
+                <button class="admin-table__btn"
+                        (click)="editingSubId = sub._id; subForm.patchValue(sub); showSubForm = true">
+                  <span class="material-icons" style="font-size:inherit;vertical-align:middle;">edit</span> Edit
+                </button>
+                <button class="admin-table__btn admin-table__btn--danger"
+                        (click)="onDeleteSub(sub._id)">
+                  <span class="material-icons" style="font-size:inherit;vertical-align:middle;">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <app-empty-state *ngIf="!loading && subcategories.length === 0" icon="folder_open" title="No subcategories found" message="Click 'Add Subcategory' to create one.">
+      </app-empty-state>
+    </div>
+  </div>
+</div>

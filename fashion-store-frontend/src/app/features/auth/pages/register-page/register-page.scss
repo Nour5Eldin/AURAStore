@@ -1,0 +1,320 @@
+// Brand Color Tokens
+$color-text-main: #000000;
+$color-text-muted: var(--color-ink-light);
+$color-navy: #193485;
+$color-error: #dc2626;
+
+.aura-register-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-canvas);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+// Full-screen structural background layer with custom opacity
+.aura-register-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.25; // التحكم في شفافية الخطوط والأشكال المتموجة الخلفية
+  pointer-events: none; // لمنع حجب النقرات عن المدخلات
+
+  // هنا يمكنك إدراج مسار الصورة المتموجة الخاصة بك أو استخدام الـ SVG الحالي
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000"><path d="M-100,200 C200,400 300,0 600,300 C900,600 800,200 1100,500" fill="none" stroke="%23e0e0e0" stroke-width="2"/><path d="M-100,350 C250,500 200,150 650,450 C950,700 850,350 1100,650" fill="none" stroke="%23f0f0f0" stroke-width="1.5"/></svg>');
+  background-size: cover;
+  background-position: left center;
+}
+
+// Forefront layer for the Content Form
+.aura-register-content {
+  position: relative;
+  z-index: 2; // يضمن بقاء المدخلات والنصوص واضحة وفوق الخلفية الشفافة
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px 120px 24px;
+  box-sizing: border-box;
+}
+
+// Minimal Luxury Typography Header
+.aura-brand-header {
+  margin-bottom: 60px;
+  text-align: center;
+
+  &__title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    color: $color-text-main;
+    margin: 0;
+  }
+}
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 440px;
+  background: transparent;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: $color-text-main;
+    margin-bottom: 12px;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: $color-text-muted;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 10px;
+  }
+}
+
+// Pure Form Control Visuals
+.aura-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &__label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #444651;
+  }
+
+  &__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__forgot {
+    font-size: 12px;
+    color: #1e3a8a;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__input-wrap {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid #1a1b21; // ← أسود زي الصورة
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1a1b21;
+    background: var(--color-canvas);
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+    &:focus {
+      border-width: 2px;
+      border-color: #1e3a8a;
+    }
+    &--error {
+      border-color: #ba1a1a !important;
+    }
+
+    .form-field__input-wrap & {
+      padding-right: 48px;
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #757682;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    &:hover {
+      color: #1a1b21;
+    }
+  }
+
+  &__error {
+    font-size: 12px;
+    color: #ba1a1a;
+  }
+}
+
+// Custom Premium Inputs
+.aura-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  margin-top: 4px;
+  line-height: 1.4;
+
+  input[type='checkbox'] {
+    accent-color: $color-navy;
+    width: 15px;
+    height: 15px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 13px;
+    color: var(--color-tertiary);
+  }
+}
+
+// Action Mechanics
+.aura-btn-primary {
+  width: 100%;
+  background-color: $color-navy;
+  color: var(--color-canvas);
+  border: none;
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.95;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+// Social Login Integration UI
+.aura-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 40px 0 30px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 0.5px solid #e0e0e0;
+  }
+
+  &__text {
+    padding: 0 15px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #777777;
+    font-weight: 500;
+  }
+}
+
+.aura-social-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.aura-btn-social {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: var(--color-canvas);
+  border: 0.5px solid #cccccc;
+  padding: 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #fafafa;
+  }
+
+  &__logo {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+
+    &.google-logo {
+      color: #000000;
+      font-family: 'Arial Black', sans-serif;
+    }
+    &.apple-logo {
+      color: #000000;
+      font-family: -apple-system, sans-serif;
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+  }
+}
+
+.auth-switch-mode {
+  text-align: center;
+  font-size: 14px;
+  color: $color-text-muted;
+}
+
+.aura-link {
+  color: $color-text-main;
+  text-decoration: underline;
+
+  &--bold {
+    font-weight: 700;
+    text-decoration: none;
+    padding-left: 4px;
+  }
+}
+
+.auth-error-banner {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: $color-error;
+  padding: 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}

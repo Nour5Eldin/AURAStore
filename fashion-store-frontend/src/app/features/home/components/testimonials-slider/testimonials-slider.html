@@ -1,0 +1,54 @@
+<section class="testimonials" *ngIf="!loading && testimonials.length > 0">
+    <div class="container">
+
+        <div class="testimonials__header">
+            <h2 class="testimonials__title">What Our Customers Say</h2>
+            <p class="testimonials__subtitle">Real reviews from real people</p>
+        </div>
+
+        <div class="testimonials__slider">
+
+            <!-- Cards -->
+            <div class="testimonials__track">
+                <div *ngFor="let t of testimonials; let i = index" class="testimonials__card"
+                    [class.testimonials__card--active]="i === currentIndex"
+                    [class.testimonials__card--prev]="i === currentIndex - 1 || (currentIndex === 0 && i === testimonials.length - 1)"
+                    [class.testimonials__card--next]="i === currentIndex + 1 || (currentIndex === testimonials.length - 1 && i === 0)">
+
+                    <!-- Stars -->
+                    <div class="testimonials__stars">
+                        <span *ngFor="let s of getStars(t.stars)"><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+                    </div>
+
+                    <!-- Comment -->
+                    <p class="testimonials__comment">"{{ t.comment }}"</p>
+
+                    <!-- User -->
+                    <div class="testimonials__user">
+                        <div class="testimonials__avatar">
+                            {{ getUserInitial(t) }}
+                        </div>
+                        <div class="testimonials__user-info">
+                            <span class="testimonials__user-name">{{ getUserName(t) }}</span>
+                            <span class="testimonials__user-date">
+                                {{ t.createdAt | date:'MMM yyyy' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="testimonials__controls">
+                <button class="testimonials__btn" (click)="prev()">←</button>
+                <div class="testimonials__dots">
+                    <button *ngFor="let t of testimonials; let i = index" class="testimonials__dot"
+                        [class.testimonials__dot--active]="i === currentIndex" (click)="goTo(i)">
+                    </button>
+                </div>
+                <button class="testimonials__btn" (click)="next()">→</button>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,79 @@
+.rb {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.rb__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+}
+
+.rb__avg {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.rb__stars-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rb__total {
+  font-size: 11px;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.04em;
+}
+
+.rb__bars {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rb__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rb__label {
+  font-size: 12px;
+  color: var(--color-ink-light);
+  font-weight: 500;
+  min-width: 20px;
+  text-align: right;
+}
+
+.rb__track {
+  flex: 1;
+  height: 6px;
+  background: var(--color-canvas-mid);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.rb__fill {
+  height: 100%;
+  background: #D4A015;
+  border-radius: 9999px;
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 2px;
+}
+
+.rb__count {
+  font-size: 12px;
+  color: var(--color-ink-muted);
+  min-width: 24px;
+}

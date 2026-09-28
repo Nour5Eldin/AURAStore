@@ -1,0 +1,141 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Orders</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="admin-filters">
+            <select class="admin-select" [(ngModel)]="filters.status" (change)="filters.page=1; load()">
+                <option *ngFor="let s of statusOptions" [value]="s.value">
+                    {{ s.label }}
+                </option>
+            </select>
+
+            <input class="admin-search" type="text" placeholder="Search by phone..." [(ngModel)]="filters.search"
+                (keyup.enter)="filters.page=1; load()" />
+        </div>
+
+        <!-- Layout -->
+        <div class="orders-layout">
+
+            <!-- Orders Table -->
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Phone</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="loading">
+                            <td colspan="6">
+                                <app-skeleton-loader *ngFor="let i of [1,2,3,4,5]" height="40px"></app-skeleton-loader>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let order of orders"
+                            [class.admin-table__row--selected]="selectedOrder?._id === order._id"
+                            (click)="selectedOrder = order" style="cursor:pointer">
+                            <td class="admin-table__bold">#{{ order._id.slice(-8).toUpperCase() }}</td>
+                            <td class="admin-table__muted">{{ order.createdAt | date:'d MMM yyyy' }}</td>
+                            <td>{{ order.phoneNumber }}</td>
+                            <td class="admin-table__bold">EGP {{ order.totalPrice | number }}</td>
+                            <td>
+                                <span class="badge" [style.color]="getStatusColor(order.status)"
+                                    [style.background]="getStatusColor(order.status) + '18'">
+                                    {{ order.status | orderStatus }}
+                                </span>
+                            </td>
+                            <td>
+                                <button *ngIf="nextStatusMap[order.status]" class="admin-btn admin-btn--sm"
+                                    (click)="advanceStatus(order); $event.stopPropagation()">
+                                    → {{ nextStatusMap[order.status] | titlecase }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <app-empty-state *ngIf="!loading && orders.length === 0" icon="inventory_2" title="No orders found">
+                </app-empty-state>
+
+                <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1"
+                    [currentPage]="pagination.page || 1" [totalPages]="pagination.totalPages || 1"
+                    [totalItems]="pagination.total || 0" [limit]="15" (pageChange)="onPageChange($event)">
+                </app-pagination>
+            </div>
+
+            <!-- Order Detail Panel -->
+            <div class="order-panel" *ngIf="selectedOrder">
+                <div class="order-panel__header">
+                    <h3 class="order-panel__title">
+                        #{{ selectedOrder._id.slice(-8).toUpperCase() }}
+                    </h3>
+                    <button class="order-panel__close" (click)="selectedOrder = null">×</button>
+                </div>
+
+                <div class="order-panel__body">
+
+                    <!-- Status -->
+                    <div class="order-panel__section">
+                        <p class="order-panel__label">Status</p>
+                        <span class="badge" [style.color]="getStatusColor(selectedOrder.status)"
+                            [style.background]="getStatusColor(selectedOrder.status) + '18'">
+                            {{ selectedOrder.status | orderStatus }}
+                        </span>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="order-panel__section">
+                        <p class="order-panel__label">Delivery Info</p>
+                        <p class="order-panel__value">{{ selectedOrder.address }}</p>
+                        <p class="order-panel__value">{{ selectedOrder.phoneNumber }}</p>
+                    </div>
+
+                    <!-- Items -->
+                    <div class="order-panel__section">
+                        <p class="order-panel__label">Items</p>
+                        <div *ngFor="let p of selectedOrder.products" class="order-panel__item">
+                            <img [src]="p.image" [alt]="p.name" class="order-panel__img" />
+                            <div class="order-panel__item-info">
+                                <p>{{ p.name }}</p>
+                                <p class="order-panel__muted">× {{ p.quantity }}</p>
+                            </div>
+                            <span>EGP {{ (p.price * p.quantity) | number }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="order-panel__total">
+                        <span>Total</span>
+                        <span>EGP {{ selectedOrder.totalPrice | number }}</span>
+                    </div>
+
+                    <!-- Refund -->
+                    <div *ngIf="selectedOrder.refundRequested && selectedOrder.refundStatus === 'pending'"
+                        class="order-panel__refund">
+                        <p class="order-panel__label"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">warning</span> Refund Requested</p>
+                        <div class="order-panel__refund-actions">
+                            <button class="admin-btn admin-btn--success"
+                                (click)="handleRefund(selectedOrder, 'approved')">
+                                Approve
+                            </button>
+                            <button class="admin-btn admin-btn--danger"
+                                (click)="handleRefund(selectedOrder, 'refused')">
+                                Refuse
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

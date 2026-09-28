@@ -1,0 +1,580 @@
+// ─── Admin Layout ─────────────────────────────────────────────────────────
+.admin-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f8f6;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 80px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    font-family: var(--font-body);
+  }
+}
+
+// ─── Content Management ───────────────────────────────────────────────────
+.content-mgmt {
+
+  padding: 24px;
+  color: #1a1b21;
+
+  &__header {
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #111827;
+    margin: 0 0 6px;
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+  }
+
+  // Tabs
+  &__tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 2px;
+  }
+
+  &__tab-btn {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #1e3a8a;
+    }
+
+    &--active {
+      color: #1e3a8a;
+      border-bottom-color: #1e3a8a;
+    }
+  }
+
+  // Section details
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  &__section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #111827;
+  }
+
+  &__section-subtitle {
+    font-size: 14px;
+    color: #4b5563;
+    margin: -16px 0 32px;
+    max-width: 700px;
+  }
+
+  &__add-btn {
+    padding: 10px 20px;
+    background: #1e3a8a;
+    color: var(--color-canvas);
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #1d4ed8;
+    }
+  }
+
+  // Loading, Empty
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 0;
+    color: #4b5563;
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(30, 58, 138, 0.1);
+      border-top-color: #1e3a8a;
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 80px 24px;
+    background: #f9fafb;
+    border: 2px dashed #e5e7eb;
+    border-radius: 12px;
+    color: #6b7280;
+
+    svg {
+      margin: 0 auto 16px;
+    }
+
+    p {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  // Slides list grid
+  &__slides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+}
+
+// Slide Card Styling
+.slide-card {
+  background: var(--color-canvas);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  }
+
+  &--inactive {
+    opacity: 0.6;
+    border-color: #e5e7eb;
+  }
+
+  &__image-wrap {
+    position: relative;
+    height: 180px;
+    background: #eeedf4;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 20px;
+    background: #ef4444;
+    color: var(--color-canvas);
+
+    &--active {
+      background: #10b981;
+    }
+  }
+
+  &__info {
+    padding: 20px;
+    flex-grow: 1;
+  }
+
+  &__label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 8px;
+  }
+
+  &__desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4b5563;
+    margin: 0 0 16px;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: #6b7280;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 12px;
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: #f9fafb;
+  }
+
+  &__action-btn {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    &:not(:last-child) {
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    &--toggle {
+      color: #4b5563;
+      &:hover {
+        background: #f3f4f6;
+      }
+    }
+
+    &--edit {
+      color: #1e3a8a;
+      &:hover {
+        background: rgba(30, 58, 138, 0.05);
+      }
+    }
+
+    &--delete {
+      color: #ef4444;
+      &:hover {
+        background: rgba(239, 68, 68, 0.05);
+      }
+    }
+  }
+}
+
+// Campaign Form Styling
+.campaign-form {
+  max-width: 760px;
+  background: var(--color-canvas);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+  &__submit-btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    background: #1e3a8a;
+    color: var(--color-canvas);
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Forms Shared Styles
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+
+  &--checkbox {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+
+    .required {
+      color: #ef4444;
+    }
+  }
+
+  &__input {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #111827;
+    background: var(--color-canvas);
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus {
+      outline: none;
+      border-color: #1e3a8a;
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+    }
+
+    &--textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: inherit;
+    }
+  }
+
+  &__file-input {
+    font-size: 14px;
+    color: #4b5563;
+    padding: 8px 0;
+  }
+
+  &__hint {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  &__checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  }
+}
+
+// Source selector button styling for slide image type selection
+.source-selector {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+
+  &__btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    background: var(--color-canvas);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      background: #f9fafb;
+    }
+
+    &--active {
+      border-color: #1e3a8a;
+      background: rgba(30, 58, 138, 0.05);
+      color: #1e3a8a;
+    }
+  }
+}
+
+// Slide Modal Overlay Styles
+.slide-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    background: var(--color-canvas);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+
+  &__close-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover {
+      color: #374151;
+    }
+  }
+
+  .slide-form {
+    padding: 24px;
+
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding-top: 20px;
+    }
+
+    &__btn {
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+
+      &--cancel {
+        background: var(--color-canvas);
+        border: 1px solid #d1d5db;
+        color: #374151;
+
+        &:hover {
+          background: #f9fafb;
+          border-color: #c5c6cc;
+        }
+      }
+
+      &--submit {
+        background: #1e3a8a;
+        border: none;
+        color: var(--color-canvas);
+
+        &:hover:not(:disabled) {
+          background: #1d4ed8;
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

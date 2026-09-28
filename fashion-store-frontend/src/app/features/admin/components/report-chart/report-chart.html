@@ -1,0 +1,16 @@
+<div class="chart">
+    <h3 class="chart__title">{{ title }}</h3>
+
+    <div *ngIf="data.length === 0" class="chart__empty">
+        No data available
+    </div>
+
+    <div *ngIf="data.length > 0" class="chart__bars">
+        <div *ngFor="let bar of bars" class="chart__bar-wrap">
+            <span class="chart__value">{{ bar.formatted }}</span>
+            <div class="chart__bar" [style.height]="bar.height" [style.background]="color">
+            </div>
+            <span class="chart__label">{{ bar.label }}</span>
+        </div>
+    </div>
+</div>

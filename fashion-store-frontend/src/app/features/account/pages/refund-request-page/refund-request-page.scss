@@ -1,0 +1,180 @@
+.refund-page {
+  &__back {
+    display: inline-block;
+    font-size: 13px;
+    color: #6b7280;
+    text-decoration: none;
+    margin-bottom: 16px;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #1e3a8a;
+    }
+  }
+
+  &__order-id {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: -12px;
+    margin-bottom: 20px;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__item-img {
+    width: 52px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f8f8f6;
+    flex-shrink: 0;
+  }
+
+  &__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+
+  &__item-qty {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  &__item-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e3a8a;
+    flex-shrink: 0;
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding: 14px 0;
+    border-top: 2px solid #e5e7eb;
+    margin-bottom: 24px;
+  }
+
+  &__reason {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  &__reason-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__reason-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__char-count {
+    font-size: 12px;
+    color: #9ca3af;
+    transition: color 0.2s;
+
+    &--ok {
+      color: #16a34a;
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.6;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: #1e3a8a;
+    }
+  }
+
+  &__hint {
+    font-size: 12px;
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__cancel-btn {
+    padding: 12px 24px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    text-decoration: none;
+    transition: all 0.15s;
+
+    &:hover {
+      border-color: #1e3a8a;
+      color: #1e3a8a;
+    }
+  }
+
+  &__submit-btn {
+    flex: 1;
+    padding: 13px;
+    background: #dc2626;
+    color: var(--color-canvas);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

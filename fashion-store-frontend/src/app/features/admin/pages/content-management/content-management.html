@@ -1,0 +1,233 @@
+<div class="admin-page">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="admin-content">
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <h1 class="admin-topbar__title">Content Management</h1>
+    </div>
+
+    <div class="content-mgmt">
+      <!-- Subtitle -->
+      <p class="content-mgmt__subtitle">
+        Manage dynamic text, images, sliders, and campaign configurations across the store.
+      </p>
+
+      <!-- Tabs Navigation -->
+      <div class="content-mgmt__tabs">
+        <button class="content-mgmt__tab-btn"
+                [class.content-mgmt__tab-btn--active]="activeTab === 'slides'"
+                (click)="activeTab = 'slides'">
+          <span class="material-icons" style="font-size:inherit;vertical-align:middle;">desktop_mac</span> Homepage Carousel Slides
+        </button>
+        <button class="content-mgmt__tab-btn"
+                [class.content-mgmt__tab-btn--active]="activeTab === 'campaign'"
+                (click)="activeTab = 'campaign'">
+          <span class="material-icons" style="font-size:inherit;vertical-align:middle;">campaign</span> Campaign Banner Config
+        </button>
+      </div>
+
+      <!-- Tab 1: Carousel Slides -->
+      <div class="content-mgmt__content" *ngIf="activeTab === 'slides'">
+        <div class="content-mgmt__actions">
+          <h2 class="content-mgmt__section-title">Home Hero Carousel</h2>
+          <button class="content-mgmt__add-btn" (click)="openAddSlide()">
+            <span class="material-icons" style="font-size:inherit;vertical-align:middle;">add</span> Add New Slide
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div class="content-mgmt__loading" *ngIf="slidesLoading">
+          <div class="spinner"></div>
+          <p>Loading slides...</p>
+        </div>
+
+        <!-- Empty -->
+        <div class="content-mgmt__empty" *ngIf="!slidesLoading && slides.length === 0">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.5">
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          <p>No slides found. Click "Add New Slide" to start customizing your homepage.</p>
+        </div>
+
+        <!-- Slides List -->
+        <div class="content-mgmt__slides-grid" *ngIf="!slidesLoading && slides.length > 0">
+          <div class="slide-card" *ngFor="let slide of slides" [class.slide-card--inactive]="!slide.isActive">
+            <div class="slide-card__image-wrap">
+              <img [src]="slide.image" alt="Slide Image" class="slide-card__image" />
+              <div class="slide-card__badge" [class.slide-card__badge--active]="slide.isActive">
+                {{ slide.isActive ? 'Active' : 'Inactive' }}
+              </div>
+            </div>
+            <div class="slide-card__info">
+              <span class="slide-card__label">{{ slide.label }}</span>
+              <h3 class="slide-card__title">{{ slide.title }}</h3>
+              <p class="slide-card__desc">{{ slide.description }}</p>
+              <div class="slide-card__meta">
+                <span class="slide-card__order">Order: <strong>{{ slide.order }}</strong></span>
+                <span class="slide-card__link">Link: <code>{{ slide.link }}</code></span>
+              </div>
+            </div>
+            <div class="slide-card__actions">
+              <button class="slide-card__action-btn slide-card__action-btn--toggle"
+                      (click)="toggleSlideActive(slide)"
+                      [attr.aria-label]="slide.isActive ? 'Deactivate Slide' : 'Activate Slide'">
+                {{ slide.isActive ? 'Pause' : 'Activate' }}
+                <span class="material-icons" style="font-size:inherit;vertical-align:middle;">{{ slide.isActive ? 'pause' : 'play_arrow' }}</span>
+              </button>
+              <button class="slide-card__action-btn slide-card__action-btn--edit" (click)="openEditSlide(slide)">
+                <span class="material-icons" style="font-size:inherit;vertical-align:middle;">edit</span> Edit
+              </button>
+              <button class="slide-card__action-btn slide-card__action-btn--delete" (click)="deleteSlide(slide)">
+                <span class="material-icons" style="font-size:inherit;vertical-align:middle;">delete</span> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Campaign Banner Config -->
+      <div class="content-mgmt__content" *ngIf="activeTab === 'campaign'">
+        <h2 class="content-mgmt__section-title">Limited Edition Banner Configurations</h2>
+        <p class="content-mgmt__section-subtitle">
+          This banner displays on the homepage to highlight special promotions, collections, or sales campaigns.
+        </p>
+
+        <!-- Loading -->
+        <div class="content-mgmt__loading" *ngIf="campaignLoading">
+          <div class="spinner"></div>
+          <p>Loading campaign configurations...</p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="campaignForm" (ngSubmit)="saveCampaign()" class="campaign-form" *ngIf="!campaignLoading">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-group__label">Campaign Tagline</label>
+              <input type="text" formControlName="campaignTag" class="form-group__input" placeholder="e.g. LIMITED EDITION" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-group__label">Campaign Title</label>
+              <input type="text" formControlName="campaignTitle" class="form-group__input" placeholder="e.g. Summer Collection 2026" />
+            </div>
+
+            <div class="form-group form-group--full">
+              <label class="form-group__label">Campaign Description</label>
+              <textarea formControlName="campaignDescription" class="form-group__input form-group__input--textarea" placeholder="Describe the campaign or promotion..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-group__label">Button Label Text</label>
+              <input type="text" formControlName="campaignBtnText" class="form-group__input" placeholder="e.g. EXPLORE CAMPAIGN" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-group__label">Button Redirect URL / Route</label>
+              <input type="text" formControlName="campaignBtnLink" class="form-group__input" placeholder="e.g. /products" />
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="campaignForm.invalid" class="campaign-form__submit-btn">
+            <span class="material-icons" style="font-size:inherit;vertical-align:middle;">save</span> Save Configuration Settings
+          </button>
+        </form>
+      </div>
+
+      <!-- Add/Edit Slide Modal -->
+      <div class="slide-modal" *ngIf="showSlideForm">
+        <div class="slide-modal__overlay" (click)="closeSlideForm()"></div>
+        <div class="slide-modal__content">
+          <div class="slide-modal__header">
+            <h3 class="slide-modal__title"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">{{ editingSlide ? "edit" : "add" }}</span> {{ editingSlide ? "Edit Carousel Slide" : "Add Carousel Slide" }}</h3>
+            <button class="slide-modal__close-btn" (click)="closeSlideForm()">×</button>
+          </div>
+
+          <form [formGroup]="slideForm" (ngSubmit)="saveSlide()" class="slide-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-group__label">Main Title <span class="required">*</span></label>
+                <input type="text" formControlName="title" class="form-group__input" placeholder="e.g. Elevate Your Everyday" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-group__label">Sub-heading / Label <span class="required">*</span></label>
+                <input type="text" formControlName="label" class="form-group__input" placeholder="e.g. Women's Collection" />
+              </div>
+
+              <div class="form-group form-group--full">
+                <label class="form-group__label">Description <span class="required">*</span></label>
+                <input type="text" formControlName="description" class="form-group__input" placeholder="e.g. Our latest minimalist silhouettes..." />
+              </div>
+
+              <div class="form-group">
+                <label class="form-group__label">Button CTA Text <span class="required">*</span></label>
+                <input type="text" formControlName="cta" class="form-group__input" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-group__label">Button CTA Link / Route <span class="required">*</span></label>
+                <input type="text" formControlName="link" class="form-group__input" />
+              </div>
+
+              <!-- Image Selection Source -->
+              <div class="form-group form-group--full">
+                <label class="form-group__label">Image Source <span class="required">*</span></label>
+                <div class="source-selector">
+                  <button type="button"
+                          class="source-selector__btn"
+                          [class.source-selector__btn--active]="imageSource === 'url'"
+                          (click)="setImageSource('url')">
+                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">link</span> Image URL
+                  </button>
+                  <button type="button"
+                          class="source-selector__btn"
+                          [class.source-selector__btn--active]="imageSource === 'file'"
+                          (click)="setImageSource('file')">
+                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">folder_open</span> Upload File
+                  </button>
+                </div>
+              </div>
+
+              <!-- Image Input: URL -->
+              <div class="form-group form-group--full" *ngIf="imageSource === 'url'">
+                <label class="form-group__label">Direct Image URL</label>
+                <input type="text" formControlName="imageUrl" class="form-group__input" placeholder="e.g. https://images.unsplash.com/..." />
+                <small class="form-group__hint">Paste an image URL directly from Unsplash or other hosting sites.</small>
+              </div>
+
+              <!-- Image Input: File Upload -->
+              <div class="form-group form-group--full" *ngIf="imageSource === 'file'">
+                <label class="form-group__label">Upload Image File</label>
+                <input type="file" (change)="onFileChange($event)" class="form-group__file-input" accept="image/jpeg,image/png,image/webp" />
+                <small class="form-group__hint">JPG, PNG, or WebP. Maximum size: 5MB.</small>
+              </div>
+
+              <div class="form-group">
+                <label class="form-group__label">Display Order</label>
+                <input type="number" formControlName="order" class="form-group__input" />
+                <small class="form-group__hint">Lowest numbers display first.</small>
+              </div>
+
+              <div class="form-group form-group--checkbox">
+                <label class="form-group__checkbox-label">
+                  <input type="checkbox" formControlName="isActive" />
+                  <span>Visible on Homepage</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="slide-form__actions">
+              <button type="button" class="slide-form__btn slide-form__btn--cancel" (click)="closeSlideForm()">Cancel</button>
+              <button type="submit" [disabled]="slideForm.invalid" class="slide-form__btn slide-form__btn--submit">
+                {{ editingSlide ? 'Save Changes' : 'Create Slide' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

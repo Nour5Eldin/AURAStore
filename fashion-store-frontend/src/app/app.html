@@ -1,0 +1,16 @@
+<div class="app-wrapper">
+  <div class="loading-bar" *ngIf="isLoading$ | async">
+    <div class="loading-bar__progress"></div>
+  </div>
+
+  <!-- Header: hidden on admin pages -->
+  <app-header *ngIf="!isAdminPage"></app-header>
+
+  <!-- Main Content -->
+  <main class="app-main" [class.app-main--inner]="!isHomePage && !isAdminPage" [class.app-main--admin]="isAdminPage">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer: hidden on admin pages -->
+  <app-footer *ngIf="!isAdminPage"></app-footer>
+</div>

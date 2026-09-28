@@ -1,0 +1,16 @@
+<div class="sd" (clickOutside)="open = false">
+    <button class="sd__trigger" (click)="open = !open">
+        <span class="sd__current" [style.color]="getColor(current)" [style.background]="getColor(current) + '18'">
+            {{ current | orderStatus }}
+        </span>
+        <span class="sd__chevron" [class.sd__chevron--open]="open">▾</span>
+    </button>
+
+    <div *ngIf="open" class="sd__menu">
+        <button *ngFor="let s of allStatuses" class="sd__item" [class.sd__item--active]="s.value === current"
+            (click)="select(s.value)">
+            <span class="sd__dot" [style.background]="getColor(s.value)"></span>
+            {{ s.label }}
+        </button>
+    </div>
+</div>

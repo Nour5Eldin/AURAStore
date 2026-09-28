@@ -1,0 +1,220 @@
+<div class="catalog">
+
+  <!-- ─── Page Header ──────────────────────────────────────────────────────── -->
+  <div class="catalog__page-header">
+    <!-- Breadcrumb -->
+    <nav class="catalog__breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/" class="catalog__breadcrumb-link">Home</a>
+      <span class="catalog__breadcrumb-sep">—</span>
+      <span class="catalog__breadcrumb-current">{{ categoryTitle || 'All Products' }}</span>
+    </nav>
+
+    <div class="catalog__page-title-row">
+      <h1 class="catalog__page-title">{{ categoryTitle || 'All Products' }}</h1>
+      <p class="catalog__page-count" *ngIf="!loading && total > 0">{{ total }} pieces</p>
+    </div>
+  </div>
+
+  <!-- ─── Filter + Sort Bar ────────────────────────────────────────────────── -->
+  <div class="catalog__toolbar">
+    <div class="catalog__toolbar-left">
+      <!-- Filter Toggle -->
+      <button class="catalog__filter-toggle" (click)="openFilters()" id="filter-toggle-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="10" y1="18" x2="14" y2="18" />
+        </svg>
+        Filters
+        <span class="catalog__filter-badge" *ngIf="activeFilterCount > 0">{{ activeFilterCount }}</span>
+      </button>
+
+      <!-- Inline Search -->
+      <div class="catalog__search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input type="text" class="catalog__search-input" placeholder="Search…"
+          [(ngModel)]="filters.search"
+          (input)="onSearchInput()"
+          id="catalog-search-input"
+          aria-label="Search products" />
+        <button *ngIf="filters.search" class="catalog__search-clear" (click)="clearFilter('search')" aria-label="Clear search">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Active filter chips -->
+      <div class="catalog__chips" *ngIf="activeFilterCount > 0">
+        <span class="catalog__chip" *ngIf="filters.subCategoryId && activeSubcategoryName">
+          {{ activeSubcategoryName }}
+          <button (click)="clearFilter('subcategory')" aria-label="Remove filter">×</button>
+        </span>
+        <span class="catalog__chip" *ngIf="filters.minPrice || filters.maxPrice">
+          EGP {{ filters.minPrice || 0 }} – {{ filters.maxPrice || '∞' }}
+          <button (click)="clearFilter('price')" aria-label="Remove price filter">×</button>
+        </span>
+        <button class="catalog__chip catalog__chip--clear" (click)="clearAllFilters()">Clear all</button>
+      </div>
+    </div>
+
+    <!-- Sort -->
+    <div class="catalog__sort">
+      <span class="catalog__sort-label">Sort:</span>
+      <select class="catalog__sort-select" [(ngModel)]="filters.sortBy" (change)="applyFilters()" id="catalog-sort-select">
+        <option value="newest">Newest</option>
+        <option value="price_asc">Price ↑</option>
+        <option value="price_desc">Price ↓</option>
+        <option value="best_sellers">Best Selling</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ─── Body ─────────────────────────────────────────────────────────────── -->
+  <div class="catalog__body">
+
+    <!-- Sidebar Filter Panel -->
+    <aside class="catalog__sidebar" [class.catalog__sidebar--open]="showFilters" id="filter-sidebar">
+      <div class="catalog__sidebar-inner">
+
+        <!-- CATEGORIES -->
+        <div class="catalog__filter-group" *ngIf="subcategories.length > 0">
+          <h3 class="catalog__filter-title">Category</h3>
+          <div class="catalog__filter-list">
+            <label class="catalog__filter-option" *ngFor="let cat of subcategories">
+              <input type="checkbox"
+                [checked]="pendingFilters.subCategoryId === cat._id"
+                (change)="togglePendingSubcategory(cat._id)" />
+              <span class="catalog__filter-option-label">{{ cat.title }}</span>
+              <span class="catalog__filter-option-check">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- PRICE RANGE -->
+        <div class="catalog__filter-group">
+          <h3 class="catalog__filter-title">Price</h3>
+          <div class="catalog__price-inputs">
+            <div class="catalog__price-field">
+              <span class="catalog__price-currency">EGP</span>
+              <input type="number" placeholder="Min" [(ngModel)]="pendingFilters.minPrice"
+                class="catalog__price-input" id="price-min-input" />
+            </div>
+            <span class="catalog__price-dash">—</span>
+            <div class="catalog__price-field">
+              <span class="catalog__price-currency">EGP</span>
+              <input type="number" placeholder="Max" [(ngModel)]="pendingFilters.maxPrice"
+                class="catalog__price-input" id="price-max-input" />
+            </div>
+          </div>
+        </div>
+
+        <!-- SORT (mobile duplicate) -->
+        <div class="catalog__filter-group catalog__filter-group--mobile">
+          <h3 class="catalog__filter-title">Sort By</h3>
+          <div class="catalog__filter-list">
+            <label class="catalog__filter-option" *ngFor="let opt of sortOptions">
+              <input type="radio" name="sort" [value]="opt.value" [(ngModel)]="pendingFilters.sortBy" />
+              <span class="catalog__filter-option-label">{{ opt.label }}</span>
+              <span class="catalog__filter-option-check">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Clear -->
+        <button class="catalog__clear-all-btn" (click)="clearPendingFilters()">
+          Clear Pending Filters
+        </button>
+
+        <!-- Apply / Cancel -->
+        <div class="catalog__sidebar-actions">
+          <button class="catalog__btn-cancel" (click)="closeFilters()">Cancel</button>
+          <button class="catalog__btn-apply" (click)="commitFilters()">Apply</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── Products Area ──────────────────────────────────────────────────── -->
+    <div class="catalog__products">
+
+      <!-- Loading Skeleton -->
+      <div class="catalog__grid" *ngIf="loading">
+        <div class="product-card-skeleton" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="catalog__empty" *ngIf="!loading && products.length === 0">
+        <div class="catalog__empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#CCCCCC" stroke-width="1">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+        </div>
+        <p class="catalog__empty-text">No products found</p>
+        <p class="catalog__empty-sub">Try adjusting or removing your filters</p>
+        <button class="catalog__empty-btn" (click)="clearAllFilters()">Clear Filters</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="catalog__grid" *ngIf="!loading && products.length > 0">
+        <div class="balmoral-card" *ngFor="let p of products; let i = index" (click)="goToProduct(p.slug)">
+          <div class="balmoral-card__image-wrap">
+            <img [src]="p.mainImage || p.images?.[0]" [alt]="p.name" class="balmoral-card__image" loading="lazy" />
+            <span class="balmoral-card__badge balmoral-card__badge--out" *ngIf="p.stock === 0">Sold Out</span>
+            <div class="balmoral-card__hover">
+              <button class="balmoral-card__quick-btn" (click)="$event.stopPropagation(); goToProduct(p.slug)">
+                Quick View
+              </button>
+            </div>
+          </div>
+          <div class="balmoral-card__body">
+            <p class="balmoral-card__name">{{ p.name }}</p>
+            <p class="balmoral-card__price">EGP {{ p.price | number }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="catalog__pagination" *ngIf="totalPages > 1" aria-label="Product pages">
+        <button class="catalog__page-btn catalog__page-btn--arrow"
+          [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)" aria-label="Previous page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+        </button>
+
+        <ng-container *ngFor="let p of pageNumbers">
+          <button *ngIf="p <= 2 || p >= totalPages - 1 || Math.abs(p - currentPage) <= 1"
+            class="catalog__page-btn" [class.catalog__page-btn--active]="p === currentPage"
+            (click)="goToPage(p)">{{ p }}</button>
+          <span *ngIf="p === 3 && currentPage > 4" class="catalog__page-ellipsis">…</span>
+          <span *ngIf="p === totalPages - 2 && currentPage < totalPages - 3" class="catalog__page-ellipsis">…</span>
+        </ng-container>
+
+        <button class="catalog__page-btn catalog__page-btn--arrow"
+          [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)" aria-label="Next page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </nav>
+
+      <!-- Total Count -->
+      <p class="catalog__count" *ngIf="!loading && total > 0">
+        Showing {{ products.length }} of {{ total }}
+      </p>
+
+    </div>
+  </div>
+</div>

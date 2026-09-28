@@ -1,0 +1,72 @@
+<div class="account-page">
+    <div class="container">
+        <div class="account-layout">
+
+            <aside class="account-sidebar">
+                <nav class="account-nav">
+                    <a routerLink="/account/profile" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Profile</a>
+                    <a routerLink="/account/orders" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">My Orders</a>
+                    <a routerLink="/account/addresses" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Addresses</a>
+                    <a routerLink="/account/testimonial" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Write Review</a>
+                </nav>
+            </aside>
+
+            <div class="account-content">
+                <div class="account-card">
+
+                    <!-- Success State -->
+                    <div *ngIf="submitted" class="testimonial-success">
+                        <div class="testimonial-success__icon">⭐</div>
+                        <h3 class="testimonial-success__title">Thank You!</h3>
+                        <p class="testimonial-success__sub">
+                            Your testimonial has been submitted and is pending review.
+                            It will appear on our homepage once approved.
+                        </p>
+                        <a routerLink="/account/orders" class="btn-primary">
+                            View My Orders
+                        </a>
+                    </div>
+
+                    <!-- Form -->
+                    <ng-container *ngIf="!submitted">
+                        <h2 class="account-card__title">Share Your Experience</h2>
+                        <p style="font-size:14px; color:#6b7280; margin-bottom:24px;">
+                            Tell us about your overall experience with Fashion Store.
+                        </p>
+
+                        <!-- Stars -->
+                        <div class="form-field" style="margin-bottom:20px">
+                            <label class="form-field__label">Your Rating</label>
+                            <div class="star-selector">
+                                <button *ngFor="let i of [1,2,3,4,5]" type="button" class="star-selector__star"
+                                    [class.star-selector__star--active]="i <= stars" (click)="setStars(i)">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comment -->
+                        <div class="form-field" style="margin-bottom:20px">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:6px">
+                                <label class="form-field__label">Your Comment</label>
+                                <span style="font-size:12px; color:#9ca3af">{{ charCount }}/500</span>
+                            </div>
+                            <textarea class="refund-form__textarea" [(ngModel)]="comment" rows="5" maxlength="500"
+                                placeholder="Share your experience with Fashion Store...">
+              </textarea>
+                        </div>
+
+                        <button class="btn-primary" [disabled]="loading" (click)="onSubmit()">
+                            {{ loading ? 'Submitting...' : 'Submit Testimonial' }}
+                        </button>
+                    </ng-container>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

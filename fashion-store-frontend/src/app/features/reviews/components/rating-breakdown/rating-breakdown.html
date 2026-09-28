@@ -1,0 +1,21 @@
+<div class="rb" *ngIf="summary && summary.total > 0">
+  <!-- Average Score -->
+  <div class="rb__score">
+    <span class="rb__avg">{{ averageRounded }}</span>
+    <div class="rb__stars-wrap">
+      <app-star-rating [value]="summary.average" [size]="18"></app-star-rating>
+      <span class="rb__total">{{ summary.total }} reviews</span>
+    </div>
+  </div>
+
+  <!-- Bar Breakdown 5→1 -->
+  <div class="rb__bars">
+    <div class="rb__row" *ngFor="let row of rows">
+      <span class="rb__label">{{ row.star }}<span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+      <div class="rb__track">
+        <div class="rb__fill" [style.width.%]="row.pct"></div>
+      </div>
+      <span class="rb__count">{{ row.count }}</span>
+    </div>
+  </div>
+</div>

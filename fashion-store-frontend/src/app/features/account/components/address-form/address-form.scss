@@ -1,0 +1,131 @@
+.addr-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  &__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  &__label-toggle {
+    display: flex;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &__label-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: var(--color-canvas);
+    font-size: 13px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    & + & {
+      border-left: 1px solid #e5e7eb;
+    }
+
+    &--active {
+      background: #1e3a8a;
+      color: var(--color-canvas);
+      font-weight: 600;
+    }
+    &:hover:not(&--active) {
+      background: #f9fafb;
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: #1e3a8a;
+    }
+    &--err {
+      border-color: #dc2626;
+    }
+  }
+
+  &__err {
+    font-size: 12px;
+    color: #dc2626;
+  }
+
+  &__check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+    cursor: pointer;
+    margin-bottom: 16px;
+
+    input {
+      accent-color: #1e3a8a;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__btn {
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1.5px solid transparent;
+
+    &--cancel {
+      background: var(--color-canvas);
+      border-color: #e5e7eb;
+      color: #374151;
+      &:hover {
+        border-color: #1e3a8a;
+        color: #1e3a8a;
+      }
+    }
+
+    &--save {
+      background: #1e3a8a;
+      color: var(--color-canvas);
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

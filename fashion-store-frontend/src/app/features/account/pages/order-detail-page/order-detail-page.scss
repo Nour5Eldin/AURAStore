@@ -1,0 +1,257 @@
+.order-detail {
+  &__back {
+    display: inline-block;
+    font-size: 13px;
+    color: #6b7280;
+    text-decoration: none;
+    margin-bottom: 16px;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #1e3a8a;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+
+  &__date {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+  }
+
+  &__status-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  // ─── Timeline ─────────────────────────────────────────────────────────────
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__item-img {
+    width: 60px;
+    height: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f8f8f6;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__item-qty {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  &__item-total {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a8a;
+    flex-shrink: 0;
+  }
+
+  &__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 2px solid #e5e7eb;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &__grand-total {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__cancel-btn {
+    padding: 12px 24px;
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: all 0.15s;
+
+    &:hover:not(:disabled) {
+      background: #fee2e2;
+    }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__refund-btn {
+    padding: 12px 24px;
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      background: #ffedd5;
+    }
+  }
+}
+
+// ─── Timeline ─────────────────────────────────────────────────────────────
+.order-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  padding-top: 16px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: #e5e7eb;
+  }
+
+  &__step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  &__dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    border: 2px solid var(--color-canvas);
+    z-index: 1;
+    transition: all 0.3s;
+
+    .order-timeline__step--done & {
+      background: #16a34a;
+    }
+    .order-timeline__step--active & {
+      background: #1e3a8a;
+      box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.15);
+    }
+  }
+
+  &__label {
+    font-size: 11px;
+    color: #9ca3af;
+    text-align: center;
+    font-weight: 500;
+
+    .order-timeline__step--done & {
+      color: #16a34a;
+    }
+    .order-timeline__step--active & {
+      color: #1e3a8a;
+    }
+  }
+}
+
+// ─── Refund Form ──────────────────────────────────────────────────────────
+.refund-form {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+
+    &:focus {
+      border-color: #f97316;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.refund-status {
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+}

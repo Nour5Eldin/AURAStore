@@ -1,0 +1,12 @@
+<div class="chips" *ngIf="chips.length > 0">
+    <span class="chips__label">Active Filters:</span>
+    <div class="chips__list">
+        <span *ngFor="let chip of chips" class="chips__chip">
+            {{ chip.label }}
+            <button class="chips__remove" (click)="remove.emit(chip)">×</button>
+        </span>
+    </div>
+    <button class="chips__clear" (click)="clearAll.emit()">
+        Clear All
+    </button>
+</div>

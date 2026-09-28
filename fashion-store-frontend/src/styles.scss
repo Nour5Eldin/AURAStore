@@ -1,0 +1,609 @@
+// ─────────────────────────────────────────────────────────
+//  Angular Material
+// ─────────────────────────────────────────────────────────
+@use '@angular/material' as mat;
+
+// ─────────────────────────────────────────────────────────
+//  Tailwind
+// ─────────────────────────────────────────────────────────
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// ─────────────────────────────────────────────────────────
+//  Design Tokens — Balmoral-Inspired Minimal Palette
+// ─────────────────────────────────────────────────────────
+:root {
+  // ── Core Colors ──────────────────────────────────────
+  --color-ink:           #0A0A0A;      // near-black text
+  --color-ink-light:     #3D3D3D;      // secondary text
+  --color-ink-muted:     #888888;      // muted / labels
+  --color-ink-faint:     #BBBBBB;      // very subtle
+
+  --color-canvas:        #FFFFFF;      // pure white
+  --color-canvas-warm:   #F5F5F3;      // warm off-white (Balmoral bg)
+  --color-canvas-mid:    #EBEBEA;      // subtle divider bg
+  --color-canvas-deep:   #E0E0DE;      // border color
+
+  --color-border:        #E8E8E4;      // light border
+  --color-border-strong: #CACAC7;      // stronger border
+
+  // ── Legacy aliases (keep for backward compat with components not yet redesigned) ──
+  --color-primary:                #0A0A0A;
+  --color-primary-container:      #3D3D3D;
+  --color-on-primary:             #FFFFFF;
+  --color-on-primary-container:   #F5F5F3;
+  --color-inverse-primary:        #888888;
+
+  --color-secondary:              #555555;
+  --color-secondary-container:    #EBEBEA;
+  --color-on-secondary:           #FFFFFF;
+  --color-on-secondary-container: #333333;
+
+  --color-tertiary:               #333333;
+  --color-tertiary-container:     #E0E0DE;
+  --color-on-tertiary:            #FFFFFF;
+  --color-on-tertiary-container:  #0A0A0A;
+
+  --color-error:                  #B91C1C;
+  --color-on-error:               #FFFFFF;
+  --color-error-container:        #FEE2E2;
+  --color-on-error-container:     #7F1D1D;
+
+  --color-surface:                #FFFFFF;
+  --color-surface-dim:            #E0E0DE;
+  --color-surface-bright:         #FFFFFF;
+  --color-surface-low:            #F5F5F3;
+  --color-surface-container:      #EBEBEA;
+  --color-surface-high:           #E8E8E4;
+  --color-surface-highest:        #E0E0DE;
+  --color-surface-lowest:         #FFFFFF;
+  --color-surface-variant:        #EBEBEA;
+
+  --color-on-surface:             #0A0A0A;
+  --color-on-surface-variant:     #555555;
+  --color-inverse-surface:        #0A0A0A;
+  --color-inverse-on-surface:     #F5F5F3;
+
+  --color-outline:                #BBBBBB;
+  --color-outline-variant:        #E8E8E4;
+  --color-surface-tint:           #555555;
+
+  --color-background:             #FFFFFF;
+  --color-on-background:          #0A0A0A;
+
+  // ── Spacing (8px base unit) ──────────────────────────
+  --space-xs:      4px;
+  --space-sm:      16px;
+  --space-md:      24px;
+  --space-lg:      48px;
+  --space-xl:      80px;
+  --space-2xl:     120px;
+  --space-gutter:  24px;
+  --space-margin:  40px;
+
+  // ── Border Radius ────────────────────────────────────
+  --radius-none:   0px;
+  --radius-sm:     2px;
+  --radius-md:     4px;
+  --radius-lg:     6px;
+  --radius-xl:     8px;
+  --radius-full:   9999px;
+
+  // ── Typography ───────────────────────────────────────
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif; // legacy alias
+
+  // Display — Cormorant for big editorial headings
+  --text-display-xl-size:    80px;
+  --text-display-xl-weight:  400;
+  --text-display-xl-leading: 0.95;
+  --text-display-xl-tracking:-0.03em;
+
+  --text-display-lg-size:    56px;
+  --text-display-lg-weight:  400;
+  --text-display-lg-leading: 1.0;
+  --text-display-lg-tracking:-0.02em;
+
+  --text-headline-xl-size:    40px;
+  --text-headline-xl-weight:  400;
+  --text-headline-xl-leading: 1.1;
+  --text-headline-xl-tracking:-0.01em;
+
+  --text-headline-md-size:    28px;
+  --text-headline-md-weight:  400;
+  --text-headline-md-leading: 1.3;
+
+  --text-body-lg-size:    18px;
+  --text-body-lg-weight:  300;
+  --text-body-lg-leading: 1.7;
+
+  --text-body-md-size:    16px;
+  --text-body-md-weight:  300;
+  --text-body-md-leading: 1.7;
+
+  --text-label-md-size:    13px;
+  --text-label-md-weight:  500;
+  --text-label-md-leading: 1.2;
+  --text-label-md-tracking:0.08em;
+
+  --text-label-sm-size:    11px;
+  --text-label-sm-weight:  500;
+  --text-label-sm-leading: 1.2;
+  --text-label-sm-tracking:0.12em;
+
+  // ── Transitions ──────────────────────────────────────
+  --transition-fast:   150ms ease;
+  --transition-base:   300ms ease;
+  --transition-slow:   600ms ease;
+  --transition-reveal: 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// ─────────────────────────────────────────────────────────
+//  Angular Material Theme
+// ─────────────────────────────────────────────────────────
+html {
+  height: 100%;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$blue-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: 'Inter',
+      density: 0,
+    )
+  );
+
+  --mat-sys-primary:            var(--color-ink);
+  --mat-sys-on-primary:         var(--color-canvas);
+  --mat-sys-primary-container:  var(--color-ink-light);
+  --mat-sys-secondary:          var(--color-ink-light);
+  --mat-sys-tertiary:           var(--color-ink-light);
+  --mat-sys-error:              var(--color-error);
+  --mat-sys-surface:            var(--color-canvas);
+  --mat-sys-on-surface:         var(--color-ink);
+  --mat-sys-outline:            var(--color-border);
+  --mat-sys-background:         var(--color-canvas);
+  --mat-sys-on-background:      var(--color-ink);
+}
+
+// ─────────────────────────────────────────────────────────
+//  Base / Reset
+// ─────────────────────────────────────────────────────────
+body {
+  color-scheme: light;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  font-weight: var(--text-body-md-weight);
+  line-height: var(--text-body-md-leading);
+  margin: 0;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+}
+
+// ─────────────────────────────────────────────────────────
+//  Typography Utility Classes
+// ─────────────────────────────────────────────────────────
+.text-display-xl {
+  font-family: var(--font-display);
+  font-size: var(--text-display-xl-size);
+  font-weight: var(--text-display-xl-weight);
+  line-height: var(--text-display-xl-leading);
+  letter-spacing: var(--text-display-xl-tracking);
+}
+
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-display-lg-size);
+  font-weight: var(--text-display-lg-weight);
+  line-height: var(--text-display-lg-leading);
+  letter-spacing: var(--text-display-lg-tracking);
+}
+
+.text-headline-xl {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-xl-size);
+  font-weight: var(--text-headline-xl-weight);
+  line-height: var(--text-headline-xl-leading);
+  letter-spacing: var(--text-headline-xl-tracking);
+}
+
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  line-height: var(--text-headline-md-leading);
+}
+
+.text-body-lg {
+  font-size: var(--text-body-lg-size);
+  font-weight: var(--text-body-lg-weight);
+  line-height: var(--text-body-lg-leading);
+}
+
+.text-body-md {
+  font-size: var(--text-body-md-size);
+  font-weight: var(--text-body-md-weight);
+  line-height: var(--text-body-md-leading);
+}
+
+.text-label-md {
+  font-family: var(--font-body);
+  font-size: var(--text-label-md-size);
+  font-weight: var(--text-label-md-weight);
+  line-height: var(--text-label-md-leading);
+  letter-spacing: var(--text-label-md-tracking);
+  text-transform: uppercase;
+}
+
+.text-label-sm {
+  font-family: var(--font-body);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-sm-weight);
+  line-height: var(--text-label-sm-leading);
+  letter-spacing: var(--text-label-sm-tracking);
+  text-transform: uppercase;
+}
+
+// ─────────────────────────────────────────────────────────
+//  Scroll Reveal Animation System
+// ─────────────────────────────────────────────────────────
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--transition-reveal), transform var(--transition-reveal);
+
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &--delay-1 { transition-delay: 120ms; }
+  &--delay-2 { transition-delay: 240ms; }
+  &--delay-3 { transition-delay: 360ms; }
+  &--delay-4 { transition-delay: 480ms; }
+}
+
+// ─────────────────────────────────────────────────────────
+//  Component Styles
+// ─────────────────────────────────────────────────────────
+
+// Ghost Button (Balmoral primary CTA)
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-none);
+  font-family: var(--font-body);
+  font-size: var(--text-label-md-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-md-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+
+  &:hover {
+    background: var(--color-ink);
+    color: var(--color-canvas);
+  }
+
+  &--white {
+    color: var(--color-canvas);
+    border-color: var(--color-canvas);
+    &:hover {
+      background: var(--color-canvas);
+      color: var(--color-ink);
+    }
+  }
+}
+
+// Solid Button
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--color-ink);
+  color: var(--color-canvas);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-none);
+  padding: 13px 32px;
+  font-family: var(--font-body);
+  font-size: var(--text-label-md-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-md-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+  width: 100%;
+
+  &:hover:not(:disabled) { opacity: 0.85; }
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-none);
+  padding: 13px 32px;
+  font-family: var(--font-body);
+  font-size: var(--text-label-md-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-md-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+
+  &:hover {
+    background: var(--color-canvas-warm);
+    border-color: var(--color-ink);
+  }
+}
+
+// Outline Button (alias for btn-secondary)
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-none);
+  padding: 11px 24px;
+  font-family: var(--font-body);
+  font-size: var(--text-label-md-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-md-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+
+  &:hover {
+    background: var(--color-canvas-warm);
+    border-color: var(--color-ink);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+
+// Product Card
+.product-card {
+  background-color: transparent;
+  border-radius: 0;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:hover .product-card__image {
+    transform: scale(1.04);
+  }
+
+  .product-card__image-wrap {
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--color-canvas-warm);
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+  }
+
+  .product-card__body {
+    padding: 14px 0 0;
+  }
+
+  .product-card__name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .product-card__price {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--color-ink-light);
+  }
+}
+
+// Input Fields
+.input-field {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  -webkit-appearance: none;
+
+  &::placeholder { color: var(--color-ink-muted); }
+  &:focus { border-color: var(--color-ink); }
+}
+
+// Chips / Filter Tags
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-label-sm-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-sm-tracking);
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  background: var(--color-canvas);
+  color: var(--color-ink-light);
+  transition: all var(--transition-fast);
+
+  &.chip--active,
+  &:hover {
+    background: var(--color-ink);
+    color: var(--color-canvas);
+    border-color: var(--color-ink);
+  }
+}
+
+// Stock Badge
+.stock-badge {
+  font-size: var(--text-label-sm-size);
+  font-weight: 500;
+  letter-spacing: var(--text-label-sm-tracking);
+  text-transform: uppercase;
+
+  &--low  { color: var(--color-error); }
+  &--out  { color: var(--color-ink-muted); }
+}
+
+// Section spacing
+.section    { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+.section--md{ padding-top: var(--space-lg);  padding-bottom: var(--space-lg); }
+
+// Container
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--space-margin);
+
+  @media (max-width: 768px) { padding: 0 20px; }
+}
+
+// ─── Shared Components (Extracted) ────────────────────────────────────────
+
+// Quantity Control (Extracted from cart/pdp)
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+
+  &__btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--color-canvas-warm);
+    font-family: var(--font-body);
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--color-ink);
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover:not(:disabled) { background: var(--color-border); }
+    &:disabled { opacity: 0.3; cursor: not-allowed; }
+  }
+
+  &__val {
+    width: 40px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-ink);
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+}
+
+// Balmoral Card (Used in related products etc)
+.balmoral-card {
+  background: var(--color-canvas);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  text-decoration: none;
+  display: block;
+
+  &:hover { background: var(--color-canvas-warm); }
+  &:hover &__image { transform: scale(1.04); }
+
+  &__image-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--color-canvas-mid);
+  }
+
+  &__image {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__body {
+    padding: 14px 16px 20px;
+  }
+
+  &__name {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 300;
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+}

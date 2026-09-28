@@ -1,0 +1,18 @@
+<div class="addr-card" [class.addr-card--default]="address.isDefault">
+    <div class="addr-card__top">
+        <div class="addr-card__label-row">
+            <span class="addr-card__label">{{ address.label | titlecase }}</span>
+            <span *ngIf="address.isDefault" class="addr-card__default-badge">Default</span>
+        </div>
+        <p class="addr-card__text">{{ address.addressText }}</p>
+    </div>
+
+    <div class="addr-card__actions">
+        <button *ngIf="!address.isDefault" class="addr-card__btn addr-card__btn--default"
+            (click)="setDefault.emit(address._id)">
+            Set Default
+        </button>
+        <button class="addr-card__btn" (click)="edit.emit(address)">Edit</button>
+        <button class="addr-card__btn addr-card__btn--delete" (click)="delete.emit(address._id)">Delete</button>
+    </div>
+</div>

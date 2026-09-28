@@ -1,0 +1,50 @@
+<section class="section">
+  <div class="container">
+
+    <div class="section__header">
+      <div>
+        <h2 class="section__title">New Arrivals</h2>
+        <p class="section__subtitle">Fresh styles just landed</p>
+      </div>
+      <a routerLink="/products" [queryParams]="{sortBy: 'newest'}"
+         class="section__link">
+        View All →
+      </a>
+    </div>
+
+    <!-- Skeleton -->
+    <div *ngIf="loading" class="products-grid">
+      <app-skeleton-loader
+        *ngFor="let i of [1,2,3,4,5,6,7,8]"
+        type="product-card">
+      </app-skeleton-loader>
+    </div>
+
+    <!-- Error -->
+    <app-empty-state
+      *ngIf="error && !loading"
+      icon="sentiment_dissatisfied"
+      title="Couldn't load products"
+      message="Please try again later."
+      btnText="Refresh"
+      (btnClick)="ngOnInit()">
+    </app-empty-state>
+
+    <!-- Products -->
+    <div *ngIf="!loading && !error" class="products-grid">
+      <app-product-card
+        *ngFor="let product of products"
+        [product]="product">
+      </app-product-card>
+    </div>
+
+    <!-- Empty -->
+    <app-empty-state
+      *ngIf="!loading && !error && products.length === 0"
+      icon="checkroom"
+      title="Coming Soon"
+      message="New products will be available soon.">
+    </app-empty-state>
+
+  </div>
+</section>

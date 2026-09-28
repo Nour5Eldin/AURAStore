@@ -1,0 +1,180 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Users</h1>
+            <span class="admin-topbar__count" *ngIf="!loading">
+                {{ pagination.total || 0 }} total users
+            </span>
+            <button class="btn btn--primary" style="margin-left: auto;" (click)="openModal()">
+                <span class="material-icons">add</span> Add User
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="admin-filters">
+            <select class="admin-select" [(ngModel)]="filters.role" (change)="filters.page=1; load()">
+                <option value="">All Roles</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <select class="admin-select" [(ngModel)]="filters.isActive" (change)="filters.page=1; load()">
+                <option value="">All Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+
+            <input class="admin-search" type="text" placeholder="Search by name or mobile..."
+                [(ngModel)]="filters.search" (keyup.enter)="filters.page=1; load()" />
+        </div>
+
+        <!-- Table -->
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email / Mobile</th>
+                        <th>Auth Provider</th>
+                        <th>Gender</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="loading">
+                        <td colspan="6">
+                            <app-skeleton-loader *ngFor="let i of [1,2,3,4,5]" height="40px"></app-skeleton-loader>
+                        </td>
+                    </tr>
+
+                    <tr *ngFor="let u of users">
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-cell__avatar">
+                                    <img *ngIf="u.avatar" [src]="u.avatar" [alt]="u.name" />
+                                    <span *ngIf="!u.avatar">{{ getInitial(u.name) }}</span>
+                                </div>
+                                <div>
+                                    <p class="user-cell__name">{{ u.username || u.name }}</p>
+                                    <p class="user-cell__email" *ngIf="u.name !== u.username">{{ u.name }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngIf="u.email">{{ u.email }}</div>
+                            <div *ngIf="u.mobile" class="admin-table__muted">{{ u.mobile }}</div>
+                        </td>
+                        <td>
+                            <span class="badge" [ngClass]="{
+                                'badge--blue': u.authProvider === 'auth0',
+                                'badge--muted': u.authProvider === 'local' || !u.authProvider
+                            }">
+                                {{ u.authProvider || 'local' | titlecase }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" [class.badge--blue]="u.gender === 'male'"
+                                [class.badge--pink]="u.gender === 'female'">
+                                {{ u.gender | titlecase }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" [class.badge--amber]="u.role === 'admin'"
+                                [class.badge--muted]="u.role === 'user'">
+                                {{ u.role | titlecase }}
+                            </span>
+                        </td>
+                        <td>
+                            <label class="toggle-switch">
+                                <input type="checkbox" [checked]="u.isActive" (change)="onToggleActive(u)" />
+                                <span class="toggle-switch__slider"></span>
+                            </label>
+                        </td>
+                        <td class="admin-table__muted">
+                            {{ u.createdAt | date:'d MMM yyyy' }}
+                        </td>
+                        <td>
+                            <button class="action-btn" title="Edit" (click)="openModal(u)">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="action-btn action-btn--danger" title="Delete" (click)="deleteUser(u)">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <app-empty-state *ngIf="!loading && users.length === 0" icon="people" title="No users found"
+                message="No users match your current filters.">
+            </app-empty-state>
+        </div>
+
+        <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1" [currentPage]="pagination.page || 1"
+            [totalPages]="pagination.totalPages || 1" [totalItems]="pagination.total || 0" [limit]="20"
+            (pageChange)="onPageChange($event)">
+        </app-pagination>
+    </div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="modal-overlay" *ngIf="showModal">
+    <div class="modal">
+        <div class="modal__header">
+            <h3>{{ selectedUser ? 'Edit User' : 'Add New User' }}</h3>
+            <button class="modal__close" (click)="closeModal()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="modal__body">
+            <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" formControlName="name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" formControlName="username" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" formControlName="email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Mobile</label>
+                    <input type="text" formControlName="mobile" class="form-control" />
+                </div>
+                <div class="form-group" *ngIf="!selectedUser">
+                    <label>Password</label>
+                    <input type="password" formControlName="password" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select formControlName="role" class="form-control">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select formControlName="gender" class="form-control">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div class="modal__actions">
+                    <button type="button" class="btn btn--outline" (click)="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn--primary" [disabled]="userForm.invalid || saving">
+                        {{ saving ? 'Saving...' : 'Save User' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

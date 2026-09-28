@@ -1,0 +1,15 @@
+<!-- Skeleton -->
+<div *ngIf="loading" class="product-grid">
+    <app-skeleton-loader *ngFor="let s of skeletons" type="product-card"></app-skeleton-loader>
+</div>
+
+<!-- Empty -->
+<app-empty-state *ngIf="!loading && products.length === 0" icon="search" title="No products found"
+    message="Try adjusting your filters or search term.">
+</app-empty-state>
+
+<!-- Grid -->
+<div *ngIf="!loading && products.length > 0" class="product-grid">
+    <app-product-card *ngFor="let p of products; trackBy: trackBy" [product]="p" (quickAdd)="quickAdd.emit($event)">
+    </app-product-card>
+</div>

@@ -1,0 +1,26 @@
+<div class="addr-selector">
+    <div *ngFor="let addr of addresses" class="addr-selector__card"
+        [class.addr-selector__card--selected]="addr._id === selectedId" (click)="select.emit(addr._id)">
+
+        <div class="addr-selector__radio">
+            <div class="addr-selector__dot" [class.addr-selector__dot--on]="addr._id === selectedId">
+            </div>
+        </div>
+
+        <div class="addr-selector__info">
+            <div class="addr-selector__top">
+                <span class="addr-selector__label">{{ addr.label | titlecase }}</span>
+                <span *ngIf="addr.isDefault" class="addr-selector__default">Default</span>
+            </div>
+            <p class="addr-selector__text">{{ addr.addressText }}</p>
+        </div>
+
+    </div>
+
+    <div *ngIf="addresses.length === 0" class="addr-selector__empty">
+        <p>No saved addresses.</p>
+        <a routerLink="/account/addresses" class="addr-selector__add-link">
+            + Add New Address
+        </a>
+    </div>
+</div>

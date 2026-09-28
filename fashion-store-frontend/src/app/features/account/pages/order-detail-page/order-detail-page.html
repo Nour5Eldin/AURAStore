@@ -1,0 +1,145 @@
+<div class="account-page">
+    <div class="container">
+        <div class="account-layout">
+
+            <aside class="account-sidebar">
+                <nav class="account-nav">
+                    <a routerLink="/account/profile" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Profile</a>
+                    <a routerLink="/account/orders" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">My Orders</a>
+                    <a routerLink="/account/addresses" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Addresses</a>
+                    <a routerLink="/account/testimonial" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Write Review</a>
+                </nav>
+            </aside>
+
+            <div class="account-content">
+
+                <!-- Back -->
+                <a routerLink="/account/orders" class="order-detail__back">
+                    ← Back to Orders
+                </a>
+
+                <!-- Skeleton -->
+                <app-skeleton-loader *ngIf="loading" height="500px"></app-skeleton-loader>
+
+                <ng-container *ngIf="!loading && order">
+
+                    <!-- Header -->
+                    <div class="account-card">
+                        <div class="order-detail__header">
+                            <div>
+                                <h2 class="account-card__title">
+                                    Order #{{ order._id.slice(-8).toUpperCase() }}
+                                </h2>
+                                <p class="order-detail__date">
+                                    Placed on {{ order.createdAt | date:'d MMMM yyyy, h:mm a' }}
+                                </p>
+                            </div>
+                            <span class="order-detail__status-badge" [style.color]="getStatusColor(order.status)"
+                                [style.background]="getStatusColor(order.status) + '18'">
+                                {{ order.status | orderStatus }}
+                            </span>
+                        </div>
+
+                        <!-- Status Timeline -->
+                        <div class="order-timeline"
+                            *ngIf="!['cancelledByUser','cancelledByAdmin','refused'].includes(order.status)">
+                            <div *ngFor="let step of timelineSteps"
+                                class="order-timeline__step"
+                                [class.order-timeline__step--done]="getStepStatus(step) === 'done'"
+                                [class.order-timeline__step--active]="getStepStatus(step) === 'active'">
+                                <div class="order-timeline__dot"></div>
+                                <span class="order-timeline__label">{{ step | orderStatus }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products -->
+                    <div class="account-card">
+                        <h3 class="account-card__title">Items Ordered</h3>
+                        <div class="order-detail__items">
+                            <div *ngFor="let p of order.products" class="order-detail__item">
+                                <div class="order-detail__item-img">
+                                    <img [src]="p.image" [alt]="p.name" />
+                                </div>
+                                <div class="order-detail__item-info">
+                                    <p class="order-detail__item-name">{{ p.name }}</p>
+                                    <p class="order-detail__item-qty">Qty: {{ p.quantity }}</p>
+                                </div>
+                                <span class="order-detail__item-total">
+                                    EGP {{ (p.price * p.quantity) | number }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="order-detail__total-row">
+                            <span>Order Total</span>
+                            <span class="order-detail__grand-total">
+                                EGP {{ order.totalPrice | number }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Info -->
+                    <div class="account-card">
+                        <h3 class="account-card__title">Delivery Information</h3>
+                        <div class="profile-info">
+                            <div class="profile-info__row">
+                                <span class="profile-info__label">Address</span>
+                                <span class="profile-info__value">{{ order.address }}</span>
+                            </div>
+                            <div class="profile-info__row">
+                                <span class="profile-info__label">Phone</span>
+                                <span class="profile-info__value">{{ order.phoneNumber }}</span>
+                            </div>
+                            <div class="profile-info__row">
+                                <span class="profile-info__label">Payment</span>
+                                <span class="profile-info__value">Cash on Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="order-detail__actions" *ngIf="canCancel || canRefund || order.refundRequested">
+
+                        <!-- Cancel -->
+                        <button *ngIf="canCancel" class="order-detail__cancel-btn" [disabled]="cancelling"
+                            (click)="onCancel()">
+                            {{ cancelling ? 'Cancelling...' : 'Cancel Order' }}
+                        </button>
+
+                        <!-- Refund -->
+                        <div *ngIf="canRefund">
+                            <button class="order-detail__refund-btn" (click)="showRefundForm = !showRefundForm">
+                                Request Refund
+                            </button>
+
+                            <div *ngIf="showRefundForm" class="refund-form">
+                                <label class="form-field__label">Reason for Refund</label>
+                                <textarea class="refund-form__textarea"
+                                    placeholder="Please describe your reason for refund (min 20 characters)..."
+                                    [(ngModel)]="refundReason" rows="4"></textarea>
+                                <div class="refund-form__actions">
+                                    <button class="btn-outline" (click)="showRefundForm = false">Cancel</button>
+                                    <button class="btn-primary" (click)="onRequestRefund()">Submit Request</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Refund Pending -->
+                        <div *ngIf="order.refundRequested" class="refund-status">
+                            <span *ngIf="order.refundStatus === 'pending'">Refund request pending review</span>
+                            <span *ngIf="order.refundStatus === 'approved'" style="color:#16a34a"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">check</span> Refund
+                                approved</span>
+                            <span *ngIf="order.refundStatus === 'refused'" style="color:#dc2626"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">close</span> Refund refused</span>
+                        </div>
+                    </div>
+
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

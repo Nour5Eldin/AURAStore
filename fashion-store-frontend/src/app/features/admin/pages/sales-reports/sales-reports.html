@@ -1,0 +1,81 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Sales Reports</h1>
+        </div>
+
+        <!-- Date Range -->
+        <div class="sr-filter">
+            <form [formGroup]="form" (ngSubmit)="onFetch()" class="sr-filter__form">
+                <div class="sr-filter__field">
+                    <label class="sr-filter__label">Start Date</label>
+                    <input class="sr-filter__input" type="date" formControlName="startDate" />
+                </div>
+                <div class="sr-filter__field">
+                    <label class="sr-filter__label">End Date</label>
+                    <input class="sr-filter__input" type="date" formControlName="endDate" />
+                </div>
+                <button type="submit" class="admin-btn admin-btn--primary" [disabled]="loading">
+                    {{ loading ? 'Loading...' : 'Generate Report' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- KPI Cards -->
+        <div *ngIf="report && !loading" class="sr-kpis">
+            <app-kpi-card icon="attach_money" label="Total Revenue" [value]="'EGP ' + (report.totalRevenue | number)"
+                color="green">
+            </app-kpi-card>
+            <app-kpi-card icon="inventory_2" label="Total Orders" [value]="report.totalOrders" color="blue">
+            </app-kpi-card>
+            <app-kpi-card icon="checkroom" label="Units Sold" [value]="report.totalUnits" color="purple">
+            </app-kpi-card>
+            <app-kpi-card icon="bar_chart" label="Avg Order Value"
+                [value]="'EGP ' + (report.averageOrderValue | number:'1.0-0')" color="amber">
+            </app-kpi-card>
+        </div>
+
+        <!-- Chart -->
+        <app-report-chart *ngIf="report && !loading && chartData.length > 0" title="Top Products by Units Sold"
+            [data]="chartData" prefix="" color="#1E3A8A">
+        </app-report-chart>
+
+        <!-- Top Products Table -->
+        <div *ngIf="report && !loading && report.topProducts.length > 0" class="sr-table-wrap">
+            <h3 class="sr-table-title">Top Selling Products</h3>
+            <table class="admin-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Units Sold</th>
+                        <th>Price</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of report.topProducts; let i = index">
+                        <td class="admin-table__muted">{{ i + 1 }}</td>
+                        <td class="admin-table__bold">{{ p.name }}</td>
+                        <td>
+                            <span class="badge badge--blue">{{ p.totalSold }}</span>
+                        </td>
+                        <td>EGP {{ p.price | number }}</td>
+                        <td class="admin-table__bold" style="color:#16a34a">
+                            EGP {{ (p.price * p.totalSold) | number }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty -->
+        <app-skeleton-loader *ngIf="loading" height="300px"></app-skeleton-loader>
+        <app-empty-state *ngIf="!loading && !report" icon="trending_up" title="Generate a report"
+            message="Select a date range and click Generate Report.">
+        </app-empty-state>
+
+    </div>
+</div>

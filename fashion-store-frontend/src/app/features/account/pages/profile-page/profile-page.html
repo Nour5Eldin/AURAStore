@@ -1,0 +1,168 @@
+<div class="account-page">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- Sidebar -->
+            <aside class="account-sidebar">
+                <nav class="account-nav">
+                    <a routerLink="/account/profile" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Profile</a>
+                    <a routerLink="/account/orders" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">My Orders</a>
+                    <a routerLink="/account/addresses" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Addresses</a>
+                    <a routerLink="/account/testimonial" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Write Review</a>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <div class="account-content">
+
+                <!-- Avatar Section -->
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        <img *ngIf="user?.avatar" [src]="user!.avatar" [alt]="user!.name" class="profile-avatar__img" />
+                        <div *ngIf="!user?.avatar" class="profile-avatar__initials">{{ getInitials() }}</div>
+                        <div *ngIf="avatarLoading" class="profile-avatar__loading">...</div>
+                    </div>
+                    <div class="profile-avatar__actions">
+                        <label class="profile-avatar__upload-btn">
+                            <input type="file" accept="image/*" hidden (change)="onAvatarChange($event)" />
+                            Change Photo
+                        </label>
+                        <button *ngIf="user?.avatar" class="profile-avatar__remove-btn" (click)="onRemoveAvatar()">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="account-card">
+                    <div class="account-card__header">
+                        <h2 class="account-card__title">Personal Information</h2>
+                        <button class="account-card__edit-btn" *ngIf="!editMode" (click)="editMode = true">
+                            Edit
+                        </button>
+                    </div>
+
+                    <!-- View Mode -->
+                    <div *ngIf="!editMode" class="profile-info">
+                        <div class="profile-info__row">
+                            <span class="profile-info__label">Name</span>
+                            <span class="profile-info__value">{{ user?.name }}</span>
+                        </div>
+                        <div class="profile-info__row">
+                            <span class="profile-info__label">Mobile</span>
+                            <span class="profile-info__value">{{ user?.mobile }}</span>
+                        </div>
+                        <div class="profile-info__row">
+                            <span class="profile-info__label">Email</span>
+                            <span class="profile-info__value">{{ user?.email || '—' }}</span>
+                        </div>
+                        <div class="profile-info__row">
+                            <span class="profile-info__label">Gender</span>
+                            <span class="profile-info__value">{{ user?.gender | titlecase }}</span>
+                        </div>
+                        <div class="profile-info__row">
+                            <span class="profile-info__label">Marketing Emails</span>
+                            <span class="profile-info__value">
+                                <ng-container *ngIf="user?.emailConsent">Subscribed <span class="material-icons" style="font-size:inherit;vertical-align:middle;">check</span></ng-container><ng-container *ngIf="!user?.emailConsent">Not subscribed</ng-container>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <form *ngIf="editMode" [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()"
+                        class="profile-form">
+
+                        <div class="form-field">
+                            <label class="form-field__label">Full Name</label>
+                            <input class="form-field__input" type="text" formControlName="name"
+                                [class.form-field__input--error]="f('name')?.invalid && f('name')?.touched" />
+                            <span class="form-field__error" *ngIf="f('name')?.invalid && f('name')?.touched">
+                                Name must be at least 2 characters.
+                            </span>
+                        </div>
+
+                        <p class="profile-form__hint">Email is managed and verified securely by Auth0.</p>
+
+                        <div class="form-field">
+                            <label class="form-field__label">Gender</label>
+                            <div class="gender-toggle">
+                                <button type="button" class="gender-toggle__btn"
+                                    [class.gender-toggle__btn--active]="f('gender')?.value === 'male'"
+                                    (click)="profileForm.get('gender')?.setValue('male')">Male</button>
+                                <button type="button" class="gender-toggle__btn"
+                                    [class.gender-toggle__btn--active]="f('gender')?.value === 'female'"
+                                    (click)="profileForm.get('gender')?.setValue('female')">Female</button>
+                            </div>
+                        </div>
+
+                        <label class="consent-check">
+                            <input type="checkbox" formControlName="emailConsent" />
+                            <span>Receive promotional emails</span>
+                        </label>
+
+                        <div class="profile-form__actions">
+                            <button type="button" class="btn-outline" (click)="editMode = false">Cancel</button>
+                            <button type="submit" class="btn-primary" [disabled]="loading">
+                                {{ loading ? 'Saving...' : 'Save Changes' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Change Password -->
+                <div class="account-card">
+                    <h2 class="account-card__title">Change Password</h2>
+
+                    <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="profile-form">
+
+                        <div class="form-field">
+                            <label class="form-field__label">Current Password</label>
+                            <div class="form-field__input-wrap">
+                                <input class="form-field__input" [type]="showCurrent ? 'text' : 'password'"
+                                    formControlName="currentPassword" />
+                                <button type="button" class="form-field__toggle" (click)="showCurrent = !showCurrent">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">{{ showCurrent ? "visibility_off" : "visibility" }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-field__label">New Password</label>
+                            <div class="form-field__input-wrap">
+                                <input class="form-field__input" [type]="showNew ? 'text' : 'password'"
+                                    formControlName="newPassword" />
+                                <button type="button" class="form-field__toggle" (click)="showNew = !showNew">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">{{ showNew ? "visibility_off" : "visibility" }}</span>
+                                </button>
+                            </div>
+                            <span class="form-field__error"
+                                *ngIf="fp('newPassword')?.invalid && fp('newPassword')?.touched">
+                                Min 8 characters with letters and numbers.
+                            </span>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-field__label">Confirm New Password</label>
+                            <div class="form-field__input-wrap">
+                                <input class="form-field__input" [type]="showConfirm ? 'text' : 'password'"
+                                    formControlName="confirmPassword" />
+                                <button type="button" class="form-field__toggle" (click)="showConfirm = !showConfirm">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">{{ showConfirm ? "visibility_off" : "visibility" }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" [disabled]="pwLoading">
+                            {{ pwLoading ? 'Saving...' : 'Change Password' }}
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

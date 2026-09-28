@@ -1,0 +1,342 @@
+// ─── Layout ────────────────────────────────────────────────────────────────
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+
+  // Left — Form side
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 32px 32px;
+    background: #f5f4f1;
+    overflow-y: auto;
+  }
+
+  // Logo above card
+  &__logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #1a1b21;
+    text-decoration: none;
+    margin-bottom: 40px;
+    display: block;
+  }
+
+  // Right — Image side (image on RIGHT like the design)
+  &__image {
+    position: relative;
+    overflow: hidden;
+    order: 1; // image stays on right
+
+    @media (max-width: 900px) {
+      display: none;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85);
+    }
+  }
+
+  // Footer below form
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 440px;
+    margin-top: 32px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__footer-links {
+    display: flex;
+    gap: 16px;
+
+    a {
+      color: #9ca3af;
+      text-decoration: none;
+      &:hover {
+        color: #1a1b21;
+      }
+    }
+  }
+}
+
+// ─── Card ──────────────────────────────────────────────────────────────────
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-canvas);
+  border-radius: 4px;
+  padding: 48px 44px;
+
+  @media (max-width: 480px) {
+    padding: 32px 24px;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #1a1b21;
+    margin: 0 0 8px;
+  }
+
+  &__subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #757682;
+    margin: 0 0 32px;
+    line-height: 1.5;
+  }
+
+  &__error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #ba1a1a;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  // OR divider
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0;
+    color: #9ca3af;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+  }
+
+  // Social buttons
+  &__social {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: var(--color-canvas);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #1a1b21;
+    cursor: pointer;
+    transition: background 0.15s;
+    &:hover {
+      background: #f9fafb;
+    }
+  }
+
+  &__divider-line {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 24px 0;
+  }
+
+  // Switch to register
+  &__switch {
+    text-align: center;
+
+    p {
+      font-size: 14px;
+      color: #444651;
+      margin: 0 0 12px;
+    }
+  }
+
+  &__switch-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid #1a1b21;
+    border-radius: 6px;
+    color: #1a1b21;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.15s;
+    &:hover {
+      background: #1a1b21;
+      color: var(--color-canvas);
+    }
+  }
+
+  &__inline-link {
+    color: #1e3a8a;
+    font-weight: 600;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ─── Form Fields ───────────────────────────────────────────────────────────
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &__label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #444651;
+  }
+
+  &__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__forgot {
+    font-size: 12px;
+    color: #1e3a8a;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__input-wrap {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid #1a1b21; // ← أسود زي الصورة
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1a1b21;
+    background: var(--color-canvas);
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+    &:focus {
+      border-width: 2px;
+      border-color: #1e3a8a;
+    }
+    &--error {
+      border-color: #ba1a1a !important;
+    }
+
+    .form-field__input-wrap & {
+      padding-right: 48px;
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #757682;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    &:hover {
+      color: #1a1b21;
+    }
+  }
+
+  &__error {
+    font-size: 12px;
+    color: #ba1a1a;
+  }
+}
+
+// ─── Auth Button ───────────────────────────────────────────────────────────
+.auth-btn {
+  width: 100%;
+  height: 52px;
+  background: #1e3a8a;
+  color: var(--color-canvas);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+  margin-top: 8px;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--color-canvas);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

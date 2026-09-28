@@ -1,0 +1,6 @@
+<span *ngIf="stock === 0" class="stock-badge stock-badge--out">
+    Out of Stock
+</span>
+<span *ngIf="stock > 0 && stock <= 3" class="stock-badge stock-badge--low">
+    Only {{ stock }} left!
+</span>

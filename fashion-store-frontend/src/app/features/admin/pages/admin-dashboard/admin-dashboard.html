@@ -1,0 +1,58 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Dashboard</h1>
+            <span class="admin-topbar__date">{{ today | date:'EEEE, d MMMM yyyy' }}</span>
+        </div>
+
+        <!-- Skeleton -->
+        <div *ngIf="loading" class="kpi-grid">
+            <app-skeleton-loader *ngFor="let i of [1,2,3,4,5]" height="120px"></app-skeleton-loader>
+        </div>
+
+        <!-- KPIs -->
+        <div *ngIf="!loading && kpis" class="kpi-grid">
+            <app-kpi-card icon="inventory_2" label="Total Orders" [value]="kpis.totalOrders" color="blue"></app-kpi-card>
+            <app-kpi-card icon="hourglass_empty" label="Pending Orders" [value]="kpis.pendingOrders" color="amber"></app-kpi-card>
+            <app-kpi-card icon="attach_money" label="Total Revenue" [value]="kpis.totalRevenue | currency:'EGP':'symbol':'1.0-0'"
+                color="green"></app-kpi-card>
+            <app-kpi-card icon="people" label="Total Users" [value]="kpis.totalUsers" color="purple"></app-kpi-card>
+            <app-kpi-card icon="warning" label="Low Stock" [value]="kpis.lowStockCount" color="red"></app-kpi-card>
+        </div>
+
+        <!-- Low Stock Products -->
+        <div *ngIf="!loading && kpis?.lowStockItems?.length > 0" class="admin-section">
+            <h2 class="admin-section__title"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">warning</span> Low Stock Alert</h2>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of kpis.lowStockItems">
+                            <td>
+                                <div class="admin-table__product">
+                                    <img [src]="p.mainImage" [alt]="p.name" class="admin-table__img" />
+                                    <span>{{ p.name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge--red">{{ p.stock }} left</span>
+                            </td>
+                            <td>
+                                <a [routerLink]="['/admin/products']" [queryParams]="{ id: p._id }"
+                                    class="admin-table__link">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

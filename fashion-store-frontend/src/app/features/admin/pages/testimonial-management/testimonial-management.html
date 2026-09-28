@@ -1,0 +1,73 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Testimonials</h1>
+        </div>
+
+        <!-- Filter -->
+        <div class="admin-filters">
+            <select class="admin-select" [(ngModel)]="filterStatus" (change)="page=1; load()">
+                <option value="">All Testimonials</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="refused">Refused</option>
+            </select>
+        </div>
+
+        <!-- Cards -->
+        <div *ngIf="loading" class="testimonial-grid">
+            <app-skeleton-loader *ngFor="let i of [1,2,3,4,5,6]" height="160px"></app-skeleton-loader>
+        </div>
+
+        <div *ngIf="!loading" class="testimonial-grid">
+            <div *ngFor="let t of testimonials" class="testimonial-admin-card">
+                <div class="testimonial-admin-card__header">
+                    <div class="testimonial-admin-card__user">
+                        <div class="testimonial-admin-card__avatar">
+                            {{ getUserName(t).charAt(0).toUpperCase() }}
+                        </div>
+                        <div>
+                            <p class="testimonial-admin-card__name">{{ getUserName(t) }}</p>
+                            <p class="testimonial-admin-card__date">
+                                {{ t.createdAt | date:'d MMM yyyy' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="testimonial-admin-card__stars">
+                        <span *ngFor="let s of getStars(t.stars)"><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+                    </div>
+                </div>
+
+                <p class="testimonial-admin-card__comment">"{{ t.comment }}"</p>
+
+                <div class="testimonial-admin-card__footer">
+                    <span class="badge" [class.badge--green]="t.status === 'approved'"
+                        [class.badge--amber]="t.status === 'pending'" [class.badge--red]="t.status === 'refused'">
+                        {{ t.status | titlecase }}
+                    </span>
+
+                    <div class="admin-table__actions" *ngIf="t.status === 'pending'">
+                        <button class="admin-btn admin-btn--success admin-btn--sm"
+                            (click)="onUpdateStatus(t._id, 'approved')">
+                            <span class="material-icons" style="font-size:inherit;vertical-align:middle;">check</span> Approve
+                        </button>
+                        <button class="admin-btn admin-btn--danger admin-btn--sm"
+                            (click)="onUpdateStatus(t._id, 'refused')">
+                            <span class="material-icons" style="font-size:inherit;vertical-align:middle;">close</span> Refuse
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-empty-state *ngIf="!loading && testimonials.length === 0" icon="star" title="No testimonials found">
+        </app-empty-state>
+
+        <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1" [currentPage]="pagination.page || 1"
+            [totalPages]="pagination.totalPages || 1" [totalItems]="pagination.total || 0" [limit]="15"
+            (pageChange)="page = $event; load()">
+        </app-pagination>
+    </div>
+</div>

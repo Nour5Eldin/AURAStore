@@ -1,0 +1,31 @@
+<div class="product-card" [class.product-card--oos]="isOutOfStock"
+    (mouseenter)="isHovered = true" (mouseleave)="isHovered = false">
+
+    <!-- Image -->
+    <a [routerLink]="['/products', product.slug]" class="product-card__image-wrap">
+        <img [src]="isHovered && product.images[1] ? product.images[1] : product.mainImage" [alt]="product.name"
+            class="product-card__image" loading="lazy" />
+
+        <!-- Sold Out overlay -->
+        <div *ngIf="isOutOfStock" class="product-card__sold-out">Sold Out</div>
+
+        <!-- Quick Add -->
+        <div *ngIf="!isOutOfStock" class="product-card__hover-action"
+            [class.product-card__hover-action--visible]="isHovered">
+            <button class="product-card__add-btn" [class.product-card__add-btn--added]="isAdding"
+                (click)="onAddToCart($event)" [disabled]="isAdding">
+                <ng-container *ngIf="isAdding"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">check</span> Added</ng-container><ng-container *ngIf="!isAdding">Quick Add</ng-container>
+            </button>
+        </div>
+    </a>
+
+    <!-- Info -->
+    <div class="product-card__body">
+        <a [routerLink]="['/products', product.slug]" class="product-card__name">
+            {{ product.name }}
+        </a>
+        <span class="product-card__price">
+            EGP {{ product.price | number }}
+        </span>
+    </div>
+</div>

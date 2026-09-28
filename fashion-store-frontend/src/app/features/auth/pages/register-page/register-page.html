@@ -1,0 +1,21 @@
+<div class="aura-register-container">
+    <div class="aura-register-bg-overlay"></div>
+    <div class="aura-register-content">
+        <header class="aura-brand-header"><h1 class="aura-brand-header__title">AURA</h1></header>
+        <section class="auth-wrapper" aria-labelledby="register-title">
+            <div class="auth-header">
+                <h2 id="register-title" class="auth-header__title">CREATE YOUR ACCOUNT</h2>
+                <p class="auth-header__subtitle">Create and verify your account securely with Auth0.</p>
+            </div>
+            <button type="button" class="aura-btn-primary" [disabled]="loading" (click)="signUp()">
+                {{ loading ? 'REDIRECTING…' : 'CREATE ACCOUNT' }}
+            </button>
+            <div class="aura-divider"><span class="aura-divider__text">OR CONTINUE WITH</span></div>
+            <div class="aura-social-row">
+                <button type="button" class="aura-btn-social" (click)="signUpWithProvider('google')"><span class="aura-btn-social__text">Google</span></button>
+                <button type="button" class="aura-btn-social" (click)="signUpWithProvider('apple')"><span class="aura-btn-social__text">Apple</span></button>
+            </div>
+            <p class="auth-switch-mode">Already have an account?<a routerLink="/auth/login" class="aura-link aura-link--bold">Sign in</a></p>
+        </section>
+    </div>
+</div>

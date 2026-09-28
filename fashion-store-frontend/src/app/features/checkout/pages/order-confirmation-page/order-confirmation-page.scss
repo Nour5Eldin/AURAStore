@@ -1,0 +1,85 @@
+.confirm-page {
+  padding: 80px 0;
+  background: #f8f8f6;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Reuse checkout done styles ────────────────────────────────────────────
+.checkout__done {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--color-canvas);
+  border: 0.5px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 56px 40px;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    padding: 40px 24px;
+    margin: 0 16px;
+  }
+}
+
+.checkout-done {
+  &__icon {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+  }
+
+  &__sub {
+    font-size: 15px;
+    color: #6b7280;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    padding: 13px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+
+    &--primary {
+      background: #1e3a8a;
+      color: var(--color-canvas);
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    &--outline {
+      border: 1.5px solid #1e3a8a;
+      color: #1e3a8a;
+
+      &:hover {
+        background: #1e3a8a;
+        color: var(--color-canvas);
+      }
+    }
+  }
+}

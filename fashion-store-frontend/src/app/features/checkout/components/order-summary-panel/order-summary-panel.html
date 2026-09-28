@@ -1,0 +1,35 @@
+<div class="osp">
+    <h3 class="osp__title">Order Summary</h3>
+
+    <div class="osp__items">
+        <div *ngFor="let item of items" class="osp__item">
+            <div class="osp__img-wrap">
+                <img [src]="getProduct(item)?.mainImage || getProduct(item)?.images?.[0]"
+                    [alt]="getProduct(item)?.name || 'Product'" class="osp__img" />
+                <span class="osp__qty-badge">{{ item.quantity }}</span>
+            </div>
+            <div class="osp__info">
+                <p class="osp__name">{{ getProduct(item)?.name || 'Product' }}</p>
+            </div>
+            <span class="osp__total">EGP {{ item.totalPrice | number }}</span>
+        </div>
+    </div>
+
+    <div class="osp__divider"></div>
+
+    <div class="osp__row">
+        <span>Subtotal</span>
+        <span>EGP {{ subtotal | number }}</span>
+    </div>
+    <div class="osp__row">
+        <span>Delivery</span>
+        <span class="osp__free">Cash on Delivery</span>
+    </div>
+
+    <div class="osp__divider osp__divider--bold"></div>
+
+    <div class="osp__total-row">
+        <span>Total</span>
+        <span>EGP {{ subtotal | number }}</span>
+    </div>
+</div>

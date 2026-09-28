@@ -1,0 +1,217 @@
+<div class="checkout">
+    <div class="container">
+
+        <!-- Page Title -->
+        <div class="checkout__header">
+            <h1 class="checkout__title">Checkout</h1>
+
+            <!-- Step Indicator -->
+            <div class="checkout__steps">
+                <div class="checkout__step" [class.checkout__step--active]="step === 'address'"
+                    [class.checkout__step--done]="step === 'review' || step === 'done'">
+                    <span class="checkout__step-num">1</span>
+                    <span class="checkout__step-label">Address</span>
+                </div>
+                <div class="checkout__step-line"></div>
+                <div class="checkout__step" [class.checkout__step--active]="step === 'review'"
+                    [class.checkout__step--done]="step === 'done'">
+                    <span class="checkout__step-num">2</span>
+                    <span class="checkout__step-label">Review</span>
+                </div>
+                <div class="checkout__step-line"></div>
+                <div class="checkout__step" [class.checkout__step--active]="step === 'done'">
+                    <span class="checkout__step-num">3</span>
+                    <span class="checkout__step-label">Done</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading && step !== 'done'" class="checkout__loading">
+            <app-skeleton-loader height="400px"></app-skeleton-loader>
+        </div>
+
+        <div *ngIf="!loading || step === 'done'" class="checkout__body">
+
+            <!-- ═══ STEP 1: ADDRESS ═══════════════════════════════════════════ -->
+            <ng-container *ngIf="step === 'address'">
+                <div class="checkout__layout">
+
+                    <!-- Left: Address + Phone -->
+                    <div class="checkout__left">
+
+                        <!-- Saved Addresses -->
+                        <div class="checkout-section">
+                            <h3 class="checkout-section__title">Delivery Address</h3>
+
+                            <!-- No addresses -->
+                            <div *ngIf="addresses.length === 0" class="checkout__no-address">
+                                <p>No saved addresses.</p>
+                                <a routerLink="/account/addresses" class="checkout__add-address-link">
+                                    + Add New Address
+                                </a>
+                            </div>
+
+                            <!-- Address Cards -->
+                            <div class="address-grid">
+                                <div *ngFor="let addr of addresses" class="address-card"
+                                    [class.address-card--selected]="f('addressId')?.value === addr._id"
+                                    (click)="selectAddress(addr._id)">
+                                    <div class="address-card__radio">
+                                        <div class="address-card__radio-dot"
+                                            [class.address-card__radio-dot--active]="f('addressId')?.value === addr._id">
+                                        </div>
+                                    </div>
+                                    <div class="address-card__info">
+                                        <span class="address-card__label">{{ addr.label | titlecase }}</span>
+                                        <p class="address-card__text">{{ addr.addressText }}</p>
+                                        <span *ngIf="addr.isDefault" class="address-card__default">Default</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span class="form-field__error" *ngIf="f('addressId')?.invalid && f('addressId')?.touched">
+                                Please select a delivery address.
+                            </span>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="checkout-section">
+                            <h3 class="checkout-section__title">Contact Phone</h3>
+                            <div class="form-field">
+                                <label class="form-field__label">Phone Number</label>
+                                <input class="form-field__input" type="tel" placeholder="+20 1xx xxx xxxx"
+                                    [formControl]="$any(form.get('phoneNumber'))"
+                                    [class.form-field__input--error]="f('phoneNumber')?.invalid && f('phoneNumber')?.touched" />
+                                <span class="form-field__error"
+                                    *ngIf="f('phoneNumber')?.invalid && f('phoneNumber')?.touched">
+                                    Enter a valid phone number with country code.
+                                </span>
+                            </div>
+                        </div>
+
+                        <button class="checkout__next-btn" (click)="goToReview()">
+                            Review Order →
+                        </button>
+                    </div>
+
+                    <!-- Right: Order Summary -->
+                    <div class="checkout__right">
+                        <div class="checkout-section">
+                            <h3 class="checkout-section__title">Order Summary</h3>
+                            <div *ngFor="let item of activeItems" class="checkout__item">
+                                <div class="checkout__item-img">
+                                    <img [src]="$any(item.productId)?.mainImage || $any(item.productId)?.images?.[0]"
+                                        alt="Product" />
+                                </div>
+                                <div class="checkout__item-info">
+                                    <p class="checkout__item-name">
+                                        {{ $any(item.productId)?.name || 'Product' }}
+                                    </p>
+                                    <p class="checkout__item-qty">Qty: {{ item.quantity }}</p>
+                                </div>
+                                <span class="checkout__item-total">
+                                    EGP {{ item.totalPrice | number }}
+                                </span>
+                            </div>
+
+                            <div class="checkout__summary-total">
+                                <span>Total</span>
+                                <span>EGP {{ subtotal | number }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- ═══ STEP 2: REVIEW ════════════════════════════════════════════ -->
+            <ng-container *ngIf="step === 'review'">
+                <div class="checkout__layout">
+                    <div class="checkout__left">
+
+                        <!-- Address Summary -->
+                        <div class="checkout-section">
+                            <h3 class="checkout-section__title">Delivery To</h3>
+                            <div class="review-row">
+                                <span class="review-row__label">Address</span>
+                                <span class="review-row__value">{{ selectedAddress?.addressText }}</span>
+                            </div>
+                            <div class="review-row">
+                                <span class="review-row__label">Phone</span>
+                                <span class="review-row__value">{{ f('phoneNumber')?.value }}</span>
+                            </div>
+                            <div class="review-row">
+                                <span class="review-row__label">Payment</span>
+                                <span class="review-row__value"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">payments</span> Cash on Delivery</span>
+                            </div>
+                        </div>
+
+                        <!-- Back + Place Order -->
+                        <div class="checkout__actions">
+                            <button class="checkout__back-btn" (click)="step = 'address'">
+                                ← Edit
+                            </button>
+                            <button class="checkout__place-btn" [disabled]="loading" (click)="placeOrder()">
+                                <span *ngIf="!loading">Place Order</span>
+                                <span *ngIf="loading" class="auth-btn__spinner"></span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="checkout__right">
+                        <div class="checkout-section">
+                            <h3 class="checkout-section__title">Order Summary</h3>
+                            <div *ngFor="let item of activeItems" class="checkout__item">
+                                <div class="checkout__item-img">
+                                    <img [src]="$any(item.productId)?.mainImage" alt="Product" />
+                                </div>
+                                <div class="checkout__item-info">
+                                    <p class="checkout__item-name">
+                                        {{ $any(item.productId)?.name || 'Product' }}
+                                    </p>
+                                    <p class="checkout__item-qty">Qty: {{ item.quantity }}</p>
+                                </div>
+                                <span class="checkout__item-total">
+                                    EGP {{ item.totalPrice | number }}
+                                </span>
+                            </div>
+                            <div class="checkout__summary-total">
+                                <span>Total</span>
+                                <span>EGP {{ subtotal | number }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- ═══ STEP 3: DONE ══════════════════════════════════════════════ -->
+            <div *ngIf="step === 'done'" class="checkout__done">
+                <div class="checkout-done__icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="11" stroke="#16a34a" stroke-width="1.5" />
+                        <path d="M7 12l3.5 3.5L17 8.5" stroke="#16a34a" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <h2 class="checkout-done__title">Order Placed!</h2>
+                <p class="checkout-done__sub">
+                    Your order has been placed successfully. We'll prepare it right away.
+                </p>
+                <p class="checkout-done__status">
+                    Status: <strong>Pending</strong>
+                </p>
+                <div class="checkout-done__actions">
+                    <a [routerLink]="['/account/orders', orderId]"
+                        class="checkout-done__btn checkout-done__btn--primary">
+                        View Order
+                    </a>
+                    <a routerLink="/products" class="checkout-done__btn checkout-done__btn--outline">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

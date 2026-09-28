@@ -1,0 +1,104 @@
+<aside class="pf">
+
+  <!-- Sort -->
+  <div class="pf__group">
+    <h4 class="pf__title">Sort By</h4>
+    <select class="pf__select"
+            [value]="filters.sortBy || 'newest'"
+            (change)="onSortChange($any($event.target).value)">
+      <option *ngFor="let opt of sortOptions" [value]="opt.value">
+        {{ opt.label }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Categories -->
+  <div class="pf__group">
+    <h4 class="pf__title">Category</h4>
+    <div class="pf__options">
+      <label class="pf__option">
+        <input type="radio" name="cat"
+               [checked]="!filters.categoryId"
+               (change)="onCategoryChange(undefined)" />
+        <span>All</span>
+      </label>
+      <label *ngFor="let cat of categories" class="pf__option">
+        <input type="radio" name="cat"
+               [checked]="filters.categoryId === cat._id"
+               (change)="onCategoryChange(cat._id)" />
+        <span>{{ cat.title }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Subcategories -->
+  <div class="pf__group" *ngIf="subcategories.length > 0">
+    <h4 class="pf__title">Subcategory</h4>
+    <div class="pf__options">
+      <label class="pf__option">
+        <input type="radio" name="sub"
+               [checked]="!filters.subCategoryId"
+               (change)="onSubcategoryChange(undefined)" />
+        <span>All</span>
+      </label>
+      <label *ngFor="let sub of subcategories" class="pf__option">
+        <input type="radio" name="sub"
+               [checked]="filters.subCategoryId === sub._id"
+               (change)="onSubcategoryChange(sub._id)" />
+        <span>{{ sub.title }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ─── Price Range Slider ─────────────────────────────────────────────── -->
+  <div class="pf__group">
+    <h4 class="pf__title">Price Range</h4>
+
+    <!-- Labels -->
+    <div class="pf__price-labels">
+      <span class="pf__price-label">EGP {{ priceMin | number }}</span>
+      <span class="pf__price-label">EGP {{ priceMax | number }}</span>
+    </div>
+
+    <!-- Dual Range Track -->
+    <div class="pf__range-wrap">
+      <div class="pf__range-track">
+        <!-- الجزء المحدد (الـ fill) -->
+        <div class="pf__range-fill"
+             [style.left.%]="priceMinPercent"
+             [style.right.%]="100 - priceMaxPercent">
+        </div>
+      </div>
+
+      <!-- Min Slider -->
+      <input class="pf__range-input pf__range-input--min"
+             type="range"
+             [min]="0"
+             [max]="maxPrice"
+             [step]="50"
+             [value]="priceMin"
+             (input)="onMinChange($any($event.target).value)" />
+
+      <!-- Max Slider -->
+      <input class="pf__range-input pf__range-input--max"
+             type="range"
+             [min]="0"
+             [max]="maxPrice"
+             [step]="50"
+             [value]="priceMax"
+             (input)="onMaxChange($any($event.target).value)" />
+    </div>
+
+    <!-- Range Limits -->
+    <div class="pf__range-limits">
+      <span>EGP 0</span>
+      <span>EGP {{ maxPrice | number }}</span>
+    </div>
+  </div>
+
+  <!-- Clear -->
+  <button *ngIf="hasActive" class="pf__clear" (click)="clearAll.emit()">
+    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">close</span> Clear All Filters
+  </button>
+
+</aside>

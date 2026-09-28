@@ -1,0 +1,25 @@
+<div class="arm-overlay" *ngIf="visible" (click)="onClose()">
+    <div class="arm" (click)="$event.stopPropagation()">
+
+        <div class="arm__header">
+            <div>
+                <h3 class="arm__title">{{ title }}</h3>
+                <p *ngIf="subtitle" class="arm__subtitle">{{ subtitle }}</p>
+            </div>
+            <button class="arm__close" (click)="onClose()">×</button>
+        </div>
+
+        <div class="arm__body">
+            <textarea class="arm__textarea" [(ngModel)]="message" rows="5" placeholder="Type your message here...">
+      </textarea>
+        </div>
+
+        <div class="arm__footer">
+            <button class="arm__btn arm__btn--cancel" (click)="onClose()">Cancel</button>
+            <button class="arm__btn arm__btn--confirm" [disabled]="!message.trim()" (click)="onConfirm()">
+                Send
+            </button>
+        </div>
+
+    </div>
+</div>

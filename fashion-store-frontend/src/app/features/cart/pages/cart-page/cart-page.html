@@ -1,0 +1,167 @@
+<div class="cart-page">
+  <div class="container">
+
+    <h1 class="cart-page__title">Shopping Cart</h1>
+
+    <!-- ─── LOGGED IN USER ─────────────────────────────────────────────── -->
+    <ng-container *ngIf="isLoggedIn$ | async">
+
+      <ng-container *ngIf="!(loading$ | async); else loadingSkeleton">
+
+        <!-- Empty Cart -->
+        <app-empty-state *ngIf="guestItems.length === 0" title="Your cart is empty"
+          message="Browse our collection and add items you love." btnText="Start Shopping" btnLink="/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+            <path d="M3.103 6.034h17.794"></path>
+            <path
+              d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z">
+            </path>
+          </svg>
+        </app-empty-state>
+
+        <!-- Cart Content -->
+        <div *ngIf="(activeItems$ | async)?.length! > 0 || (priceChangedItems$ | async)?.length! > 0"
+          class="cart-layout">
+
+          <!-- Items Column -->
+          <div class="cart-items">
+
+            <!-- Active Items -->
+            <div *ngFor="let item of activeItems$ | async" class="cart-item-wrap">
+              <app-cart-item [item]="item" (quantityChange)="onUpdateQuantity(item._id, $event)"
+                (remove)="onRemoveItem(item._id)">
+              </app-cart-item>
+            </div>
+
+            <!-- Price Changed Section -->
+            <div *ngIf="(priceChangedItems$ | async)?.length! > 0" class="price-changed-section">
+              <app-price-changed-notice [items]="(priceChangedItems$ | async)!" (reAdd)="onReAdd($event)"
+                (remove)="onRemoveItem($event)">
+              </app-price-changed-notice>
+            </div>
+
+          </div>
+
+          <!-- Summary Column -->
+          <div class="cart-summary-wrap">
+            <app-cart-summary [subtotal]="(subtotal$ | async) || 0" [itemCount]="(activeItems$ | async)?.length || 0"
+              [hasPriceChangedItems]="(priceChangedItems$ | async)?.length! > 0" (checkout)="onCheckout()">
+            </app-cart-summary>
+          </div>
+
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ─── GUEST ───────────────────────────────────────────────────────── -->
+    <ng-container *ngIf="!(isLoggedIn$ | async)">
+
+      <!-- Empty Guest Cart -->
+      <app-empty-state *ngIf="guestItems.length === 0" icon="shopping-bag" title="Your cart is empty"
+        message="Browse our collection and add items you love." btnText="Start Shopping" btnLink="/">
+      </app-empty-state>
+
+      <div *ngIf="guestItems.length > 0" class="cart-layout">
+
+        <!-- Guest Items -->
+        <div class="cart-items">
+          <div *ngFor="let item of guestItems" class="cart-item-wrap">
+
+            <div class="cart-item">
+              <div class="cart-item__image-wrap">
+                <img [src]="item.image" [alt]="item.name" class="cart-item__image" />
+              </div>
+              <div class="cart-item__info">
+                <p class="cart-item__name">{{ item.name }}</p>
+                <p class="cart-item__price">EGP {{ item.price | number }}</p>
+              </div>
+              <div class="cart-item__actions">
+                <div class="qty-control">
+                  <!-- Minus Icon -->
+                  <button class="qty-control__btn" [disabled]="item.quantity <= 1"
+                    (click)="onGuestUpdate(item.productId, item.quantity - 1)" aria-label="Decrease quantity">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+
+                  <span class="qty-control__val">{{ item.quantity }}</span>
+
+                  <!-- Plus Icon -->
+                  <button class="qty-control__btn" (click)="onGuestUpdate(item.productId, item.quantity + 1)"
+                    aria-label="Increase quantity">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                </div>
+
+                <span class="cart-item__total">EGP {{ item.totalPrice | number }}</span>
+
+                <!-- Trash Icon -->
+                <button class="cart-item__remove" (click)="onGuestRemove(item.productId)" aria-label="Remove item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Guest Summary -->
+        <div class="cart-summary-wrap">
+          <div class="cart-summary">
+            <h3 class="cart-summary__title">Order Summary</h3>
+
+            <div class="cart-summary__row">
+              <span>Subtotal</span>
+              <span>EGP {{ guestSubtotal | number }}</span>
+            </div>
+            <div class="cart-summary__row">
+              <span>Delivery</span>
+              <span class="cart-summary__free">Cash on Delivery</span>
+            </div>
+
+            <div class="cart-summary__divider"></div>
+
+            <div class="cart-summary__total">
+              <span>Total</span>
+              <span>EGP {{ guestSubtotal | number }}</span>
+            </div>
+
+            <div class="cart-summary__guest-msg">
+              <p>Please login to proceed to checkout.</p>
+              <a routerLink="/auth/login" class="cart-summary__login-btn">
+                Login to Checkout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
+
+<!-- Skeleton -->
+<ng-template #loadingSkeleton>
+  <div class="cart-layout">
+    <div class="cart-items">
+      <app-skeleton-loader *ngFor="let i of [1,2,3]" height="120px" style="border-radius:12px;">
+      </app-skeleton-loader>
+    </div>
+    <app-skeleton-loader height="300px" width="100%"></app-skeleton-loader>
+  </div>
+</ng-template>

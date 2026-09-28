@@ -1,0 +1,43 @@
+<div class="price-notice">
+    <div class="price-notice__header">
+        <span class="price-notice__icon"><span class="material-icons" style="font-size:inherit;vertical-align:middle;">warning</span></span>
+        <div>
+            <h4 class="price-notice__title">Price Changed Items</h4>
+            <p class="price-notice__sub">
+                These items have updated prices and are excluded from your total.
+                Re-add them to continue.
+            </p>
+        </div>
+    </div>
+
+    <div class="price-notice__items">
+        <div *ngFor="let item of items" class="price-notice__item">
+
+            <div class="price-notice__item-img">
+                <img [src]="getProduct(item)?.mainImage" [alt]="getProduct(item)?.name || 'Product'" />
+            </div>
+
+            <div class="price-notice__item-info">
+                <p class="price-notice__item-name">{{ getProduct(item)?.name }}</p>
+                <div class="price-notice__item-prices">
+                    <span class="price-notice__old-price">
+                        EGP {{ item.price | number }}
+                    </span>
+                    <span class="price-notice__arrow">→</span>
+                    <span class="price-notice__new-price">
+                        EGP {{ getProduct(item)?.price | number }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="price-notice__item-actions">
+                <button class="price-notice__re-add" (click)="reAdd.emit(item._id)">
+                    Re-add
+                </button>
+                <button class="price-notice__remove" (click)="remove.emit(item._id)">
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

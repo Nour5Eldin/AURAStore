@@ -1,0 +1,47 @@
+<div class="addr-form">
+    <h4 class="addr-form__title">
+        {{ address ? 'Edit Address' : 'New Address' }}
+    </h4>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Label Toggle -->
+        <div class="addr-form__field">
+            <label class="addr-form__label">Label</label>
+            <div class="addr-form__label-toggle">
+                <button *ngFor="let lbl of labels" type="button" class="addr-form__label-btn"
+                    [class.addr-form__label-btn--active]="f('label')?.value === lbl"
+                    (click)="form.get('label')?.setValue(lbl)">
+                    {{ lbl | titlecase }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Address Text -->
+        <div class="addr-form__field">
+            <label class="addr-form__label">Full Address</label>
+            <textarea class="addr-form__textarea" formControlName="addressText" rows="3"
+                placeholder="Enter your full address..."
+                [class.addr-form__textarea--err]="f('addressText')?.invalid && f('addressText')?.touched">
+      </textarea>
+            <span class="addr-form__err" *ngIf="f('addressText')?.invalid && f('addressText')?.touched">
+                Address must be at least 10 characters.
+            </span>
+        </div>
+
+        <!-- Default -->
+        <label class="addr-form__check">
+            <input type="checkbox" formControlName="isDefault" />
+            <span>Set as default address</span>
+        </label>
+
+        <!-- Actions -->
+        <div class="addr-form__actions">
+            <button type="button" class="addr-form__btn addr-form__btn--cancel" (click)="cancel.emit()">Cancel</button>
+            <button type="submit" class="addr-form__btn addr-form__btn--save">
+                {{ address ? 'Update' : 'Add Address' }}
+            </button>
+        </div>
+
+    </form>
+</div>

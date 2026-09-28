@@ -1,0 +1,48 @@
+<div class="rdt-wrap">
+    <table class="rdt">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Product</th>
+                <th>Stars</th>
+                <th>Comment</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="loading">
+                <tr *ngFor="let i of [1,2,3]">
+                    <td colspan="7">
+                        <app-skeleton-loader height="40px"></app-skeleton-loader>
+                    </td>
+                </tr>
+            </ng-container>
+            <tr *ngFor="let r of reviews">
+                <td class="rdt__bold">{{ getUserName(r) }}</td>
+                <td class="rdt__muted">{{ getProductName(r) }}</td>
+                <td>
+                    <span class="rdt__stars">
+                        <span *ngFor="let s of getStars(r.stars)"><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+                    </span>
+                </td>
+                <td class="rdt__comment">{{ r.comment }}</td>
+                <td>
+                    <span class="badge" [class.badge--green]="r.isApproved" [class.badge--red]="!r.isApproved">
+                        {{ r.isApproved ? 'Approved' : 'Hidden' }}
+                    </span>
+                </td>
+                <td class="rdt__muted">{{ r.createdAt | date:'d MMM yyyy' }}</td>
+                <td>
+                    <button class="rdt__btn" [class.rdt__btn--hide]="r.isApproved"
+                        (click)="toggle.emit({ id: r._id, isApproved: !r.isApproved })">
+                        {{ r.isApproved ? 'Hide' : 'Approve' }}
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <app-empty-state *ngIf="!loading && reviews.length === 0" icon="chat" title="No reviews found">
+    </app-empty-state>
+</div>

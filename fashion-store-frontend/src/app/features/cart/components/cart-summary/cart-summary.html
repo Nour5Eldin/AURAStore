@@ -1,0 +1,41 @@
+<div class="cart-summary">
+    <h3 class="cart-summary__title">Order Summary</h3>
+
+    <div class="cart-summary__row">
+        <span>Items ({{ itemCount }})</span>
+        <span>EGP {{ subtotal | number }}</span>
+    </div>
+
+    <div class="cart-summary__row">
+        <span>Delivery</span>
+        <span class="cart-summary__free">Cash on Delivery</span>
+    </div>
+
+    <div class="cart-summary__divider"></div>
+
+    <div class="cart-summary__total">
+        <span>Total</span>
+        <span>EGP {{ subtotal | number }}</span>
+    </div>
+
+    <!-- Price Changed Warning -->
+    <div *ngIf="hasPriceChangedItems" class="cart-summary__warning">
+        <span class="material-icons" style="font-size:inherit;vertical-align:middle;">warning</span> Some items have price changes and are excluded from the total.
+        Please review them below.
+    </div>
+
+    <!-- Checkout Button -->
+    <button class="cart-summary__checkout-btn" [disabled]="itemCount === 0" (click)="checkout.emit()">
+        Proceed to Checkout
+        <span class="cart-summary__checkout-arrow">→</span>
+    </button>
+
+    <!-- Empty Warning -->
+    <p *ngIf="itemCount === 0" class="cart-summary__empty-msg">
+        Add items to proceed to checkout.
+    </p>
+
+    <a routerLink="/products" class="cart-summary__continue">
+        ← Continue Shopping
+    </a>
+</div>

@@ -1,0 +1,219 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Products</h1>
+            <button class="admin-btn admin-btn--primary" (click)="openCreate()">
+                <span class="material-icons" style="font-size:inherit;vertical-align:middle;">add</span> Add Product
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="admin-filters">
+            <select class="admin-select" [(ngModel)]="filters.categoryId" (change)="filters.page=1; loadProducts()">
+                <option value="">All Categories</option>
+                <option *ngFor="let c of categories" [value]="c._id">{{ c.title }}</option>
+            </select>
+
+            <select class="admin-select" [(ngModel)]="filters.isActive" (change)="filters.page=1; loadProducts()">
+                <option value="">All Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="loading">
+                        <td colspan="6">
+                            <app-skeleton-loader height="40px" *ngFor="let i of [1,2,3,4,5]"></app-skeleton-loader>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let p of products">
+                        <td>
+                            <div class="admin-table__product">
+                                <img [src]="p.mainImage" [alt]="p.name" class="admin-table__img" />
+                                <div>
+                                    <p class="admin-table__name">{{ p.name }}</p>
+                                    <p class="admin-table__slug">{{ p.slug }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="admin-table__muted">
+                            {{ $any(p.categoryId)?.title || '—' }}
+                        </td>
+                        <td class="admin-table__bold">EGP {{ p.price | number }}</td>
+                        <td>
+                            <span [class]="p.stock === 0 ? 'badge badge--red' :
+                             p.stock <= 3  ? 'badge badge--amber' :
+                                             'badge badge--green'">
+                                {{ p.stock }}
+                            </span>
+                        </td>
+                        <td>
+                            <label class="toggle-switch">
+                                <input type="checkbox" [checked]="p.isActive" (change)="onToggleActive(p)" />
+                                <span class="toggle-switch__slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="admin-table__actions">
+                                <button class="admin-table__btn" (click)="openEdit(p)">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">edit</span> Edit
+                                </button>
+                                <button class="admin-table__btn admin-table__btn--danger"
+                                    (click)="onDelete(p._id)">
+                                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <app-empty-state *ngIf="!loading && products.length === 0" icon="checkroom" title="No products found">
+            </app-empty-state>
+        </div>
+
+        <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1" [currentPage]="pagination.page || 1"
+            [totalPages]="pagination.totalPages || 1" [totalItems]="pagination.total || 0" [limit]="15"
+            (pageChange)="onPageChange($event)">
+        </app-pagination>
+    </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────────────────────── -->
+<!-- Product Create / Edit Modal -->
+<!-- ────────────────────────────────────────────────────────────────────────── -->
+<div class="product-modal" *ngIf="showForm">
+    <div class="product-modal__overlay" (click)="closeForm()"></div>
+    <div class="product-modal__content">
+
+        <div class="product-modal__header">
+            <h3 class="product-modal__title">
+                <span class="material-icons" style="font-size:inherit;vertical-align:middle;">
+                    {{ editProduct ? 'edit' : 'add' }}
+                </span>
+                {{ editProduct ? 'Edit Product' : 'New Product' }}
+            </h3>
+            <button class="product-modal__close" (click)="closeForm()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+
+        <form [formGroup]="productForm" (ngSubmit)="onSaveProduct()" class="product-form">
+
+            <!-- Row: Name -->
+            <div class="product-form__field">
+                <label class="product-form__label">Product Name <span class="required">*</span></label>
+                <input type="text" formControlName="name" class="product-form__input"
+                    placeholder="e.g. Classic Cotton T-Shirt"
+                    [class.product-form__input--error]="f('name')?.invalid && f('name')?.touched" />
+                <span class="product-form__error" *ngIf="f('name')?.invalid && f('name')?.touched">
+                    Name is required (min 3 characters).
+                </span>
+            </div>
+
+            <!-- Row: Description -->
+            <div class="product-form__field">
+                <label class="product-form__label">Description <span class="required">*</span></label>
+                <textarea formControlName="description" class="product-form__input product-form__textarea"
+                    rows="4" placeholder="Describe the product..."
+                    [class.product-form__input--error]="f('description')?.invalid && f('description')?.touched"></textarea>
+                <span class="product-form__error" *ngIf="f('description')?.invalid && f('description')?.touched">
+                    Description is required (min 10 characters).
+                </span>
+            </div>
+
+            <!-- Row: Price + Stock -->
+            <div class="product-form__row">
+                <div class="product-form__field">
+                    <label class="product-form__label">Price (EGP) <span class="required">*</span></label>
+                    <input type="number" formControlName="price" class="product-form__input" min="1"
+                        [class.product-form__input--error]="f('price')?.invalid && f('price')?.touched" />
+                    <span class="product-form__error" *ngIf="f('price')?.invalid && f('price')?.touched">
+                        Price must be at least 1.
+                    </span>
+                </div>
+                <div class="product-form__field">
+                    <label class="product-form__label">Stock <span class="required">*</span></label>
+                    <input type="number" formControlName="stock" class="product-form__input" min="0"
+                        [class.product-form__input--error]="f('stock')?.invalid && f('stock')?.touched" />
+                </div>
+            </div>
+
+            <!-- Row: Category + Subcategory -->
+            <div class="product-form__row">
+                <div class="product-form__field">
+                    <label class="product-form__label">Category <span class="required">*</span></label>
+                    <select formControlName="categoryId" class="product-form__input"
+                        (change)="onCategoryChange()"
+                        [class.product-form__input--error]="f('categoryId')?.invalid && f('categoryId')?.touched">
+                        <option value="">Select category</option>
+                        <option *ngFor="let c of categories" [value]="c._id">{{ c.title }}</option>
+                    </select>
+                    <span class="product-form__error" *ngIf="f('categoryId')?.invalid && f('categoryId')?.touched">
+                        Category is required.
+                    </span>
+                </div>
+                <div class="product-form__field">
+                    <label class="product-form__label">Subcategory</label>
+                    <select formControlName="subCategoryId" class="product-form__input">
+                        <option value="">None</option>
+                        <option *ngFor="let s of subcategories" [value]="s._id">{{ s.title }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row: Image -->
+            <div class="product-form__field">
+                <label class="product-form__label">Main Image</label>
+                <div class="product-form__image-section">
+                    <div class="product-form__image-preview" *ngIf="imagePreview">
+                        <img [src]="imagePreview" alt="Preview" />
+                    </div>
+                    <div class="product-form__image-inputs">
+                        <input type="text" formControlName="mainImage" class="product-form__input"
+                            placeholder="Image URL (paste link here)" />
+                        <span class="product-form__divider">or</span>
+                        <input type="file" (change)="onImageFileChange($event)"
+                            accept="image/jpeg,image/png,image/webp"
+                            class="product-form__file-input" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row: Active -->
+            <div class="product-form__field product-form__field--checkbox">
+                <label class="product-form__checkbox-label">
+                    <input type="checkbox" formControlName="isActive" />
+                    <span>Active (visible on storefront)</span>
+                </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="product-form__actions">
+                <button type="button" class="admin-btn" (click)="closeForm()">Cancel</button>
+                <button type="submit" class="admin-btn admin-btn--primary" [disabled]="saving">
+                    <span class="material-icons" style="font-size:inherit;vertical-align:middle;">
+                        {{ saving ? 'hourglass_empty' : 'save' }}
+                    </span>
+                    {{ saving ? 'Saving...' : (editProduct ? 'Update Product' : 'Create Product') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="admin-page">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="admin-content">
+        <div class="admin-topbar">
+            <h1 class="admin-topbar__title">Review Management</h1>
+        </div>
+
+        <app-review-data-table [reviews]="reviews" [loading]="loading" (toggle)="onToggle($event)">
+        </app-review-data-table>
+
+        <app-pagination *ngIf="!loading && (pagination.totalPages || 0) > 1" [currentPage]="pagination.page || 1"
+            [totalPages]="pagination.totalPages || 1" [totalItems]="pagination.total || 0" [limit]="20"
+            (pageChange)="page = $event; load()">
+        </app-pagination>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<section class="section section--gray">
+  <div class="container">
+
+    <div class="section__header">
+      <div>
+        <h2 class="section__title">Best Sellers</h2>
+        <p class="section__subtitle">Our most loved pieces</p>
+      </div>
+      <a routerLink="/products" [queryParams]="{sortBy: 'best_sellers'}"
+         class="section__link">
+        View All →
+      </a>
+    </div>
+
+    <!-- Skeleton -->
+    <div *ngIf="loading" class="products-grid">
+      <app-skeleton-loader
+        *ngFor="let i of [1,2,3,4,5,6,7,8]"
+        type="product-card">
+      </app-skeleton-loader>
+    </div>
+
+    <!-- Products -->
+    <div *ngIf="!loading && !error" class="products-grid">
+      <app-product-card
+        *ngFor="let product of products"
+        [product]="product"
+        [showBadge]="true">
+      </app-product-card>
+    </div>
+
+    <!-- Empty -->
+    <app-empty-state
+      *ngIf="!loading && !error && products.length === 0"
+      icon="⭐"
+      title="Coming Soon"
+      message="Best sellers will appear here soon.">
+    </app-empty-state>
+
+  </div>
+</section>

@@ -1,0 +1,267 @@
+<div class="home-page">
+
+  <!-- ─── HERO SLIDER ──────────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero__slides">
+      <div class="hero__slide" *ngFor="let slide of slides; let i = index"
+        [class.hero__slide--active]="currentSlide === i"
+        [style.backgroundImage]="'url(' + slide.image + ')'">
+
+        <!-- Overlay gradient -->
+        <div class="hero__slide-overlay"></div>
+
+        <!-- Content -->
+        <div class="hero__slide-content" [class.hero__slide-content--active]="currentSlide === i">
+          <p class="hero__slide-season">{{ slide.label }}</p>
+          <h1 class="hero__slide-title">{{ slide.title }}</h1>
+          <p class="hero__slide-desc">{{ slide.description }}</p>
+          <a [routerLink]="slide.link" class="hero__slide-cta">
+            {{ slide.cta }}
+            <span class="hero__slide-cta-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide counter -->
+    <div class="hero__counter">
+      <span class="hero__counter-current">{{ (currentSlide + 1).toString().padStart(2, '0') }}</span>
+      <span class="hero__counter-sep"></span>
+      <span class="hero__counter-total">{{ slides.length.toString().padStart(2, '0') }}</span>
+    </div>
+
+    <!-- Navigation arrows -->
+    <button class="hero__arrow hero__arrow--prev" (click)="prevSlide()" aria-label="Previous slide">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <button class="hero__arrow hero__arrow--next" (click)="nextSlide()" aria-label="Next slide">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll-hint">
+      <span class="hero__scroll-line"></span>
+      <span class="hero__scroll-text">Scroll</span>
+    </div>
+  </section>
+
+  <!-- ─── MARQUEE / ANNOUNCEMENT ──────────────────────────────────────── -->
+  <div class="marquee-bar">
+    <div class="marquee-bar__track">
+      <span class="marquee-bar__item">New Collection SS26</span>
+      <span class="marquee-bar__dot">·</span>
+      <span class="marquee-bar__item">Free Shipping on Orders Over EGP 1,000</span>
+      <span class="marquee-bar__dot">·</span>
+      <span class="marquee-bar__item">Premium Fashion for Men &amp; Women</span>
+      <span class="marquee-bar__dot">·</span>
+      <span class="marquee-bar__item">New Collection SS26</span>
+      <span class="marquee-bar__dot">·</span>
+      <span class="marquee-bar__item">Free Shipping on Orders Over EGP 1,000</span>
+      <span class="marquee-bar__dot">·</span>
+      <span class="marquee-bar__item">Premium Fashion for Men &amp; Women</span>
+      <span class="marquee-bar__dot">·</span>
+    </div>
+  </div>
+
+  <!-- ─── CATEGORY GRID ────────────────────────────────────────────────── -->
+  <section class="cat-grid" id="shop-by-category">
+    <div class="cat-grid__item cat-grid__item--women" (click)="navigateToCategory('women')">
+      <div class="cat-grid__image-wrap">
+        <div class="cat-grid__image cat-grid__image--women"></div>
+      </div>
+      <div class="cat-grid__info">
+        <span class="cat-grid__label">Women</span>
+        <span class="cat-grid__arrow">→</span>
+      </div>
+    </div>
+
+    <div class="cat-grid__right">
+      <div class="cat-grid__item cat-grid__item--men" (click)="navigateToCategory('men')">
+        <div class="cat-grid__image-wrap">
+          <div class="cat-grid__image cat-grid__image--men"></div>
+        </div>
+        <div class="cat-grid__info">
+          <span class="cat-grid__label">Men</span>
+          <span class="cat-grid__arrow">→</span>
+        </div>
+      </div>
+
+      <div class="cat-grid__item cat-grid__item--kids" (click)="navigateToCategory('kids')">
+        <div class="cat-grid__image-wrap">
+          <div class="cat-grid__image cat-grid__image--kids"></div>
+        </div>
+        <div class="cat-grid__info">
+          <span class="cat-grid__label">Kids</span>
+          <span class="cat-grid__arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CAMPAIGN BANNER ──────────────────────────────────────────────── -->
+  <section class="campaign" id="campaign">
+    <div class="campaign__inner">
+      <div class="campaign__text-block">
+        <p class="campaign__season reveal">{{ campaignTag }}</p>
+        <h2 class="campaign__title reveal reveal--delay-1">{{ campaignTitle }}</h2>
+        <p class="campaign__desc reveal reveal--delay-2">{{ campaignDescription }}</p>
+        <a [routerLink]="campaignBtnLink" class="btn-ghost reveal reveal--delay-3">
+          {{ campaignBtnText }}
+        </a>
+      </div>
+      <div class="campaign__visual"></div>
+    </div>
+  </section>
+
+  <!-- ─── NEW ARRIVALS ─────────────────────────────────────────────────── -->
+  <section class="products-section" id="new-arrivals">
+    <div class="products-section__container">
+
+      <div class="products-section__header reveal">
+        <div class="products-section__header-left">
+          <p class="products-section__eyebrow">Just Arrived</p>
+          <h2 class="products-section__title">New Arrivals</h2>
+        </div>
+        <a routerLink="/products" [queryParams]="{sort:'newest'}" class="products-section__view-all">
+          View All <span>→</span>
+        </a>
+      </div>
+
+      <!-- Loading Skeleton -->
+      <div class="products-section__grid" *ngIf="newArrivalsLoading">
+        <div class="product-card-skeleton" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+
+      <!-- Products -->
+      <div class="products-section__grid" *ngIf="!newArrivalsLoading">
+        <div class="product-card reveal" *ngFor="let p of newArrivals; let i = index"
+          [class]="'reveal--delay-' + (i % 4 + 1)"
+          (click)="goToProduct(p.slug)">
+          <div class="product-card__image-wrap">
+            <img [src]="p.mainImage || p.images[0]" [alt]="p.name" class="product-card__image" loading="lazy" />
+            <span class="product-card__badge product-card__badge--new">New</span>
+            <span class="product-card__badge product-card__badge--out" *ngIf="p.isOutOfStock">Sold Out</span>
+            <div class="product-card__actions">
+              <button class="product-card__quick-view" (click)="$event.stopPropagation(); goToProduct(p.slug)">
+                Quick View
+              </button>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__name">{{ p.name }}</h3>
+            <p class="product-card__price">EGP {{ p.price | number }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── EDITORIAL STRIP ──────────────────────────────────────────────── -->
+  <section class="editorial-strip">
+    <div class="editorial-strip__item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+      <p class="editorial-strip__label">Complimentary Shipping</p>
+      <p class="editorial-strip__sub">On all orders over EGP 1,000</p>
+    </div>
+    <div class="editorial-strip__divider"></div>
+    <div class="editorial-strip__item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      <p class="editorial-strip__label">Easy Returns</p>
+      <p class="editorial-strip__sub">30-day hassle-free returns</p>
+    </div>
+    <div class="editorial-strip__divider"></div>
+    <div class="editorial-strip__item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <p class="editorial-strip__label">Premium Quality</p>
+      <p class="editorial-strip__sub">Curated sustainable materials</p>
+    </div>
+  </section>
+
+  <!-- ─── BEST SELLERS ─────────────────────────────────────────────────── -->
+  <section class="products-section products-section--alt" id="best-sellers">
+    <div class="products-section__container">
+
+      <div class="products-section__header reveal">
+        <div class="products-section__header-left">
+          <p class="products-section__eyebrow">Our Favourites</p>
+          <h2 class="products-section__title">Best Sellers</h2>
+        </div>
+        <a routerLink="/products" [queryParams]="{sort:'best_sellers'}" class="products-section__view-all">
+          View All <span>→</span>
+        </a>
+      </div>
+
+      <!-- Loading Skeleton -->
+      <div class="products-section__grid" *ngIf="bestSellersLoading">
+        <div class="product-card-skeleton" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+
+      <div class="products-section__grid" *ngIf="!bestSellersLoading">
+        <div class="product-card reveal" *ngFor="let p of bestSellers; let i = index"
+          [class]="'reveal--delay-' + (i % 4 + 1)"
+          (click)="goToProduct(p.slug)">
+          <div class="product-card__image-wrap">
+            <img [src]="p.mainImage || p.images[0]" [alt]="p.name" class="product-card__image" loading="lazy" />
+            <div class="product-card__actions">
+              <button class="product-card__quick-view" (click)="$event.stopPropagation(); goToProduct(p.slug)">
+                Quick View
+              </button>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__name">{{ p.name }}</h3>
+            <p class="product-card__price">EGP {{ p.price | number }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ─────────────────────────────────────────────────── -->
+  <section class="testimonials" *ngIf="testimonials.length > 0" id="testimonials">
+    <div class="testimonials__container">
+      <div class="testimonials__header reveal">
+        <p class="testimonials__eyebrow">Community</p>
+        <h2 class="testimonials__title">What Our Customers Say</h2>
+      </div>
+      <div class="testimonials__grid">
+        <div class="testimonial-card reveal" *ngFor="let t of testimonials; let i = index"
+          [class]="'reveal--delay-' + (i + 1)">
+          <div class="testimonial-card__stars">
+            <span *ngFor="let s of getStars(t.stars)" class="testimonial-card__star"><span class="material-icons" style="font-size:inherit;vertical-align:middle;line-height:1;">star</span></span>
+          </div>
+          <p class="testimonial-card__comment">"{{ t.comment }}"</p>
+          <p class="testimonial-card__author" *ngIf="t.author">— {{ t.author }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NEWSLETTER STRIP ─────────────────────────────────────────────── -->
+  <section class="newsletter">
+    <div class="newsletter__inner">
+      <div class="newsletter__text reveal">
+        <h2 class="newsletter__title">Stay in the Know</h2>
+        <p class="newsletter__sub">New drops, exclusive offers and curated stories — straight to your inbox.</p>
+      </div>
+      <form class="newsletter__form reveal reveal--delay-2" (submit)="$event.preventDefault()">
+        <input type="email" class="newsletter__input" placeholder="Your email address" aria-label="Email for newsletter" />
+        <button type="submit" class="newsletter__btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+</div>

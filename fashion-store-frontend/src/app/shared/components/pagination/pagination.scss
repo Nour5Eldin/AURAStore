@@ -1,0 +1,48 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  &__info {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: var(--color-canvas);
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover:not(:disabled) {
+      border-color: #1e3a8a;
+      color: #1e3a8a;
+    }
+
+    &--active {
+      background: #1e3a8a;
+      border-color: #1e3a8a;
+      color: var(--color-canvas);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}

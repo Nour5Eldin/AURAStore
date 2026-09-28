@@ -1,0 +1,89 @@
+<div class="account-page">
+    <div class="container">
+        <div class="account-layout">
+
+            <aside class="account-sidebar">
+                <nav class="account-nav">
+                    <a routerLink="/account/profile" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Profile</a>
+                    <a routerLink="/account/orders" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">My Orders</a>
+                    <a routerLink="/account/addresses" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Addresses</a>
+                    <a routerLink="/account/testimonial" routerLinkActive="account-nav__link--active"
+                        class="account-nav__link">Write Review</a>
+                </nav>
+            </aside>
+
+            <div class="account-content">
+
+                <!-- Back -->
+                <a [routerLink]="['/account/orders', order?._id]" class="refund-page__back">
+                    ← Back to Order
+                </a>
+
+                <!-- Skeleton -->
+                <app-skeleton-loader *ngIf="orderLoading" height="400px"></app-skeleton-loader>
+
+                <ng-container *ngIf="!orderLoading && order">
+
+                    <div class="account-card">
+                        <h2 class="account-card__title">Request Refund</h2>
+                        <p class="refund-page__order-id">
+                            Order #{{ order._id.slice(-8).toUpperCase() }}
+                        </p>
+
+                        <!-- Order Summary -->
+                        <div class="refund-page__items">
+                            <div *ngFor="let p of order.products" class="refund-page__item">
+                                <img [src]="p.image" [alt]="p.name" class="refund-page__item-img" />
+                                <div class="refund-page__item-info">
+                                    <p class="refund-page__item-name">{{ p.name }}</p>
+                                    <p class="refund-page__item-qty">× {{ p.quantity }}</p>
+                                </div>
+                                <span class="refund-page__item-price">
+                                    EGP {{ (p.price * p.quantity) | number }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="refund-page__total">
+                            <span>Total Paid</span>
+                            <span>EGP {{ order.totalPrice | number }}</span>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="refund-page__reason">
+                            <div class="refund-page__reason-header">
+                                <label class="refund-page__reason-label">
+                                    Reason for Refund
+                                </label>
+                                <span class="refund-page__char-count" [class.refund-page__char-count--ok]="isValid">
+                                    {{ charCount }}/500
+                                </span>
+                            </div>
+                            <textarea class="refund-page__textarea" [(ngModel)]="reason" rows="6" maxlength="500"
+                                placeholder="Please describe why you want a refund (minimum 20 characters)...">
+              </textarea>
+                            <p class="refund-page__hint">
+                                Your request will be reviewed within 2-3 business days.
+                            </p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="refund-page__actions">
+                            <a [routerLink]="['/account/orders', order._id]" class="refund-page__cancel-btn">
+                                Cancel
+                            </a>
+                            <button class="refund-page__submit-btn" [disabled]="!isValid || loading"
+                                (click)="onSubmit()">
+                                {{ loading ? 'Submitting...' : 'Submit Refund Request' }}
+                            </button>
+                        </div>
+                    </div>
+
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

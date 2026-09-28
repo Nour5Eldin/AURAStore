@@ -1,0 +1,20 @@
+<div class="pagination" *ngIf="totalPages > 1">
+    <span class="pagination__info">
+        Showing {{ showingFrom }}–{{ showingTo }} of {{ totalItems }}
+    </span>
+
+    <div class="pagination__controls">
+        <button class="pagination__btn" [disabled]="currentPage === 1" (click)="goTo(currentPage - 1)">
+            ←
+        </button>
+
+        <button *ngFor="let p of pages" class="pagination__btn" [class.pagination__btn--active]="p === currentPage"
+            (click)="goTo(p)">
+            {{ p }}
+        </button>
+
+        <button class="pagination__btn" [disabled]="currentPage === totalPages" (click)="goTo(currentPage + 1)">
+            →
+        </button>
+    </div>
+</div>

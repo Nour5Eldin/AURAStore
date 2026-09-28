@@ -1,0 +1,30 @@
+.admin-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f8f6;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 80px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+}
