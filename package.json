@@ -1,0 +1,20 @@
+{
+  "name": "fashion-ecommerce",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "fashion-store-frontend",
+    "fashion-store-backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=fashion-store-backend\" \"npm run start --workspace=fashion-store-frontend\"",
+    "start": "concurrently \"npm run start --workspace=fashion-store-backend\" \"npm run start --workspace=fashion-store-frontend\"",
+    "seed": "npm run seed --workspace=fashion-store-backend",
+    "seed:reset": "npm run seed:reset --workspace=fashion-store-backend",
+    "dev:seed": "npm run seed --workspace=fashion-store-backend && npm run dev",
+    "build": "concurrently \"npm run build --workspace=fashion-store-backend\" \"npm run build --workspace=fashion-store-frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
