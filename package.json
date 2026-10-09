@@ -2,19 +2,23 @@
   "name": "fashion-ecommerce",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "workspaces": [
     "fashion-store-frontend",
     "fashion-store-backend"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=fashion-store-backend\" \"npm run start --workspace=fashion-store-frontend\"",
-    "start": "concurrently \"npm run start --workspace=fashion-store-backend\" \"npm run start --workspace=fashion-store-frontend\"",
+    "dev": "turbo run dev --parallel",
+    "start": "turbo run start --parallel",
     "seed": "npm run seed --workspace=fashion-store-backend",
     "seed:reset": "npm run seed:reset --workspace=fashion-store-backend",
     "dev:seed": "npm run seed --workspace=fashion-store-backend && npm run dev",
-    "build": "concurrently \"npm run build --workspace=fashion-store-backend\" \"npm run build --workspace=fashion-store-frontend\""
+    "build": "turbo run build"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "turbo": "^2.5.0"
   }
 }

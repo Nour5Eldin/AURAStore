@@ -9,6 +9,8 @@ lerna-debug.log*
 
 # Dependency directories
 node_modules/
+.turbo/
+.vercel/
 
 # OS metadata
 .DS_Store
