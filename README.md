@@ -41,8 +41,12 @@ and calls the public `/api/*` route, rather than making a server-to-server call.
    `fashion-store-backend/.env.example` in Vercel's Production environment. At
    minimum, configure `MONGODB_URI`, `AUTH0_DOMAIN`, `AUTH0_AUDIENCE`,
    `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET`.
-5. Configure the deployed Vercel domain in Auth0's Allowed Callback URLs, Allowed
-   Web Origins, and Allowed Logout URLs.
+5. In Auth0, create an API whose Identifier is `https://fashion-store-api` and
+   use RS256 signing. Add both `http://localhost:4200` and your deployed Vercel
+   origin to the application's Allowed Callback URLs, Allowed Web Origins, and
+   Allowed Logout URLs. Set `AUTH0_DOMAIN` to the tenant domain
+   (`noureldin65.us.auth0.com`) and `AUTH0_AUDIENCE` to the API Identifier in
+   Vercel.
 6. Deploy. Preview and Production deployments are built from this same monorepo
    root and served as one project.
 

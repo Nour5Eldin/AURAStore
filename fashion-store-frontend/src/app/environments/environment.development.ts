@@ -3,8 +3,8 @@ export const environment = {
     apiUrl: 'http://localhost:5001/api/v1',
     storeName: 'Fashion Store',
     auth0: {
-        domain: 'dev-1ojfbxq7vq2tf7k6.eu.auth0.com',
-        clientId: '1sA8SyAT7Zzmla7fZEnwV47WjbLg4EKQ',
+        domain: 'noureldin65.us.auth0.com',
+        clientId: 'V09MobGyy5f0uTgL95idglIb0ESv9ANF',
         audience: 'https://fashion-store-api',
     },
 };
